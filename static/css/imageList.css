@@ -1,0 +1,8 @@
+.imageList .ui-selecting { background: #FECA40; }
+.imageList .ui-selected { background: #F39814; color: white; }
+.imageList { list-style-type: none; margin: 0; padding: 2px;}
+.dateHeader { background: #444444; border: 1px; border-style:solid; border-color:#bbbbbb; }
+.dateHeader, .imageList li { margin: 0px; padding: 5px; font-size: 1.4em; height: 200px; width:200px; display: inline-block; vertical-align:middle;}
+
+#jobCandidatesDiv { width:240px; height:100%; overflow:auto; float: left; }
+#jobListDiv { height:100%; overflow:auto; }

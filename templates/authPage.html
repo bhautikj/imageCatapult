@@ -1,0 +1,7 @@
+$def with (status)
+
+<h1>Third-party app status</h1>
+
+$for x in status.keys():
+  $ authLoc = x + 'Auth?'
+  $x : $status[ x ] | <a href="auth/$authLoc">Modify</a><br/>

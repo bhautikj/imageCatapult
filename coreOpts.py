@@ -1,0 +1,1 @@
+thumbSize = 200

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>APP</title>
+</head>
+
+<body>
+
+<div id="imagesTab">
+  <div><ol class="imageList" id="dbImageList"></ol></div>
+  <div class="jobBar ui-widget">
+    <span class="left">
+    <button class="inlineElem" id="editButton">Edit Selection</button>
+    <button class="inlineElem" id="jobsButton">Queue Uploads</button>
+    
+    <button class="inlineElem" id="imageListFilterButton">Filter</button>
+    <span id="imageListFilter" class="menuBox">
+      <label for="from">Show From</label>
+      <input type="text" id="from" name="from" />
+      <label for="to">to</label>
+      <input type="text" id="to" name="to" />
+      <button class="inlineElem" id="applyFilterButton">Apply filter</button>
+      <a href="#" id="imageListFilterHide">x</a>
+    </span>
+
+    <button class="inlineElem" id="imageListUtilityShow">Utilities</button>
+    <span id="imageListUtility" class="menuBox">
+      <button class="inlineElem" id="uploadImagesButton">Upload Images</button>
+      <button class="inlineElem" id="authButton">App Authorisation</button>
+      <a href="#" id="imageListUtilityHide">x</a>
+    </span>
+    
+    </span>
+    <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
+    <div style="clear: both;"></div>
+  </div>
+</div>
+
+
+<div id="editBox">
+  <div id="editorSlide">
+    <img src="" width="100%" alt="../imagestore/20091128/115145.jpg" class="active" />
+  </div>
+  <div id="editOpts">
+    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="titleCheck" class="inlineElem"/></div>
+    <div class="inlineElem" id="editTitle">TITLE</div><br/>
+    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="descriptionCheck" class="inlineElem"/></div>
+    <div class="inlineElem" id="editDescription">DESCRIPTION</div><br/><br/>
+    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="tagsCheck" class="inlineElem"/></div>
+    <div ><ul id="editTags"  ></ul></div><br/>
+    
+    <div id="otherOpts">
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="otherOptsCheck" class="inlineElem"/></div>
+      Post to: 
+      <input type="checkbox" id="flickrCheck"></input><label for="flickrCheck">flickr</label>
+      <input type="checkbox" id="facebookCheck"></input><label for="facebookCheck">facebook</label>
+      <input type="checkbox" id="tumblrCheck"></input><label for="tumblrCheck">tumblr</label>
+      <input type="checkbox" id="twitterCheck"></input><label for="twitterCheck">twitter</label>
+    </div><br/>
+    
+    <div id="flickrOpts">
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="flickrSetsCheck" class="inlineElem"/></div>
+      <div class="inlineElem">Sets:</div><ol class="selectList inlineElem" id="flickrSets"></ol>
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="flickrGroupsCheck" class="inlineElem"/></div>
+      <div class="inlineElem">Groups:</div><ol class="selectList inlineElem" id="flickrGroups"></ol>
+    </div><br/>
+    
+    <div class="templateEdit" id="templateOpts">
+      <h1>Save/Load templates</h1>
+        
+      <div class="inlineElem ui-widget">
+        <button class="inlineElem" id="submitLoadTemplate">Load template</button>      
+        <ol class="selectList" id="templateList"></ol>
+        <button class="inlineElem" id="submitSaveTemplate">Save template</button>
+        <input class="inlineElem"  id="saveTemplateName" />
+      </div>
+      <br/><br/><br/>
+    </div>
+    <div class="ui-widget jobBar">
+      <span class="left">
+      <button class="inlineElem" id="toggleTemplatesButton">Toggle Templates</button>
+      <button class="inlineElem" id="applyEditsButton">Apply Edits</button>
+      <button class="inlineElem" id="cancelEditsButton">Cancel Edits</button>
+      </span>
+      <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
+    <div style="clear: both;"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="uploadImages">
+  <input id="fileupload" type="file" name="files[]" data-url="../upload" multiple>
+  <ol class="imageList" id="uploadImageList"></ol>
+  <div class="jobBar ui-widget">
+    <span class="left"><button class="inlineElem" id="uploadBackButton">Back</button></span>
+    <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
+    <div style="clear: both;"></div>
+  </div>
+</div>
+
+<div id="authPage">
+  <a href="../auth">Edit Authorisation</a><br/><br/>
+  <strong>Status:</strong><br/><br/>
+  Flickr <div id="flickrAuthStatus">unauthorised</div><br/>
+  Facebook <div id="facebookAuthStatus">unauthorised</div><br/>
+  Tumblr <div id="tumblrAuthStatus">unauthorised</div><br/>
+  Twitter <div id="twitterAuthStatus">unauthorised</div><br/>
+  <div class="jobBar ui-widget">
+    <span class="left"><button class="inlineElem" id="authBackButton">Back</button></span>
+    <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
+    <div style="clear: both;"></div>
+  </div>
+</div>
+
+<div id="jobsPage">
+  <div id="jobCandidatesDiv">
+    <ul id="jobCandidates" class="imageList connectedSortable">
+      <li class="ui-state-highlight">TEST</li>
+    </ul>
+  </div>
+
+  <div id="jobListDiv">
+    <ul id="jobQueued" class="imageList connectedSortable">
+      <li class="ui-state-highlight">TEST</li>
+    </ul>  
+  </div>
+
+  <div class="jobBar ui-widget">
+    <span class="left">
+      <button class="inlineElem" id="jobsBackButton">Back</button>
+      <button class="inlineElem" id="jobsApplyButton">Apply</button>
+      <button class="inlineElem" id="jobListDateRangeShow">Select Job Date Range</button>
+      <span id="jobListDateRange" class="menuBox">
+        <label for="jobsFrom">Jobs From</label>
+        <input type="text" id="jobsFrom" name="jobsFrom" />
+        <label for="jobsTo">To</label>
+        <input type="text" id="jobsTo" name="jobsTo" />
+        <button class="inlineElem" id="jobsDatesButton">Select Job Date Range</button>
+        <a href="#" id="jobListDateRangeHide">x</a>
+      </span>
+    </span>
+    <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
+    <div style="clear: both;"></div>
+  </div>
+</div>
+
+
+<!--Standard jquery UI setup-->
+<link href="jquery-ui-1.10.2.custom/css/ui-darkness/jquery-ui-1.10.2.custom.css" rel="stylesheet">
+<script src="jquery-ui-1.10.2.custom/js/jquery-1.9.1.js"></script>
+<script src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+
+
+<!-- Core jquery setup -->
+<script src="jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+<script src="jQuery-File-Upload/js/jquery.fileupload.js"></script>
+
+<!-- Touch support for jquery - from: https://github.com/furf/jquery-ui-touch-punch -->
+<script src="js/jquery.ui.touch-punch.min.js"></script>
+<script src="js/jquery.editinplace.js"></script>
+
+<!-- tag manipulation -->
+<script src="js/tag-it.js"></script>
+<link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
+
+<!-- Custom jquery setup -->
+<script src="js/fileupload.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/imageList.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/jobQueue.js"></script>
+
+<!-- Cusom css setup -->
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/imageList.css" />
+
+<script>
+
+$("#editBox").hide();
+$("#uploadImages").hide();
+$("#authPage").hide();
+$("#jobsPage").hide();
+
+</script>
+
+</body>
+</html>

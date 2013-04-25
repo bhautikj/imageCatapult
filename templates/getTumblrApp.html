@@ -1,0 +1,8 @@
+$def with (form)
+
+Please go <a href="http://www.tumblr.com/oauth/apps">here</a> to obtain an API key. Please set the Default callback URL to: http://localhost:8080/tumblrAuth <br/><br/>
+
+<form name="main" method="post"> 
+$if not form.valid: <p class="error">Try again</p>
+$:form.render()
+<input type="submit" />    </form>
