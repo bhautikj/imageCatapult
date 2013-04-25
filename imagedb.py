@@ -225,6 +225,31 @@ class ImageDb:
       return None
     return exists[0][0]
 
+  def deleteImageList(self, ids):
+    #get filenames
+    query= 'SELECT dburl FROM image WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
+    exists = self.db.execute(query)
+    if len(exists) == 0:
+      return
+    imagesToDelete = map(lambda x: x[0], exists)
+    
+    query= 'DELETE FROM image WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
+    self.db.execute(query)
+    query= 'DELETE FROM job WHERE job.imageId IN (' + ','.join(map(str, ids)) + ')'
+    self.db.execute(query)
+    query= 'DELETE FROM flickrImage WHERE flickrImage.imageId IN (' + ','.join(map(str, ids)) + ')'
+    self.db.execute(query)
+    
+    for image in imagesToDelete:
+      delpath = os.path.join(paths.imageBase, image)
+      try:
+        os.remove(delpath)
+        os.remove(delpath + ".thumb.jpg")
+      except:
+        print "unable to delete file: " + str(delpath)
+        pass
+    
+
   def fetchImageList(self, fetchImageListColumns, ids):    
     cols = ",".join(fetchImageListColumns)
     query= 'SELECT ' + cols + ' FROM image NATURAL JOIN flickrImage, job WHERE image.imageId = job.imageId AND image.imageId IN (' + ','.join(map(str, ids)) + ')'
@@ -343,7 +368,6 @@ class ImageDb:
     self.db.execute(query, jobTuple)
     self.db.commit()
     
-
   def updateJob(self, imageId, status, jobTime, jobDict=None):
     if jobTime == None and jobDict == None:
       return

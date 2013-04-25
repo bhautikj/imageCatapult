@@ -69,6 +69,10 @@ class ImagedbInteraface:
       for i in range(0,len(editorDict["imageList"])):
         editorDict["imageList"][i]["url"] = "../imagestore/" + editorDict["imageList"][i]["url"]
       return json.dumps(editorDict)
+    elif "deleteImagesList" in params.keys():
+      deleteImagesList = params["deleteImagesList"]
+      imageIds = json.loads(deleteImagesList)
+      imagedb.deleteImageList(imageIds)
     elif "submitList" in params.keys():
       imageIdsString = params["submitList"]
       imageIds = json.loads(imageIdsString)

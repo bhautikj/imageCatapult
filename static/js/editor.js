@@ -112,6 +112,26 @@ $("#jobsBackButton").click(function () {
   showMain();
 });
 
+$( "#deleteImagesButton").click(function() {
+  var selectedImages = [];
+  $('#dbImageList .ui-selected').each(function(){
+    var imgid =  $(this).children("img").attr("dbid");
+    if (jQuery.type(imgid) != 'undefined')
+    {
+      selectedImages.push(imgid);
+    }
+  });
+  
+  if (selectedImages.length == 0)
+    return;
+
+  $.post('../image', 
+    {deleteImagesList:JSON.stringify(selectedImages)}, 
+    function(response) {}, 'json');
+  
+  refreshImages($( "#dbImageList" ));
+});
+
 $( "#editButton" ).click(function() {
   var selectedImages = [];
   $('#dbImageList .ui-selected').each(function(){
