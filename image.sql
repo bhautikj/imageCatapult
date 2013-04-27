@@ -18,7 +18,10 @@ create table image (
   width             integer,
   height            integer,
   imagesize         integer,
-  unixTime          integer
+  unixTime          integer,
+  geoCode           integer,
+  latitude          integer,
+  longitude         integer
 );
 
 create table flickrImage (

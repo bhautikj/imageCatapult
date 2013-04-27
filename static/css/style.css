@@ -201,3 +201,11 @@ select{
 .selectList .ui-selected { background: #F39814; color: white; }
 .selectList { list-style-type: none; margin: 0; padding: 0; }
 .selectList li { margin: 0px; padding: 5px; font-size: 1.0em; width:200px; }
+
+.styledInput {
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    outline: none;
+    cursor: text;
+}

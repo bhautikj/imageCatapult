@@ -1,6 +1,16 @@
-
-
 jQuery.ajaxSettings.traditional = true;
+
+$.fn.disable = function() {
+    return this.each(function() {
+        if (typeof this.disabled != "undefined") this.disabled = true;
+    });
+}
+
+$.fn.enable = function() {
+    return this.each(function() {
+        if (typeof this.disabled != "undefined") this.disabled = false;
+    });
+}
 
 $(function() {
   $( "#flickrSets" ).selectable({
@@ -11,6 +21,9 @@ $(function() {
     unselected: function(event, ui) { $("#editorSlide").data('flickrGroupsDirty', true); },
     selected: function(event, ui) { $("#editorSlide").data('flickrGroupsDirty', true); }                          
   });
+  
+  $("#latitude").button().addClass('styledInput');
+  $("#longitude").button().addClass('styledInput');
   
   $("#templateList").selectable();
 });
@@ -323,6 +336,7 @@ $( "#editButton" ).click(function() {
   $("#editorSlide").data('flickrSetsDirty', false);
   $("#editorSlide").data('flickrGroupsDirty', false);
   $("#editorSlide").data('otherOptsDirty', false);
+  $("#editorSlide").data('geoCodeDirty', false);
   
   $(".templateEdit").hide();
   $("#toggleTemplatesButton").data("shown",false);  
@@ -348,6 +362,7 @@ $( "#toggleTemplatesButton" ).click(function() {
     $("#flickrSetsCheck").attr('checked', false);
     $("#flickrGroupsCheck").attr('checked', false); 
     $("#otherOptsCheck").attr('checked', false);
+    $("#geoCodeCheck").attr('checked', false);
     $("#saveTemplateName").val("");
     
     updateTemplateList();
@@ -408,7 +423,16 @@ $("#submitLoadTemplate").click(function() {
           setSelectedFlickrGroups(flickrGroupsArray);
           $("#editorSlide").data('flickrGroupsDirty', true);
         }
+        
+        var geoCode = data.geoCode;
+        if (geoCode != undefined)
+        {
+          
+          $("#editorSlide").data('geoCodeDirty', true);
+  //         TODO: set geo
+        }
       }
+      
     });
   
   }
@@ -422,6 +446,7 @@ $("#submitSaveTemplate").click(function() {
   var tagsCheck = $("#tagsCheck").is(':checked');
   var flickrSetsCheck = $("#flickrSetsCheck").is(':checked');
   var flickrGroupsCheck = $("#flickrGroupsCheck").is(':checked');
+  var geoCodeCheck =$("#geoCodeCheck").is(':checked');
   var otherOptsCheck = $("#otherOptsCheck").is(':checked');
   
   var templateName = $("#saveTemplateName").val();
@@ -460,6 +485,11 @@ $("#submitSaveTemplate").click(function() {
   {
     var flickrGroups = getSelectedFlickrGroups();
     templateDict["flickrGroups"] = JSON.stringify(flickrGroups);    
+  }
+  
+  if (geoCodeCheck)
+  {
+      //TODO: SET GEO OPTS
   }
 
   $.ajax({
@@ -557,6 +587,7 @@ $( "#applyEditsButton" ).click(function() {
   var flickrSetsDirty = $("#editorSlide").data('flickrSetsDirty');
   var flickrGroupsDirty = $("#editorSlide").data('flickrGroupsDirty');
   var otherOptsDirty = $("#editorSlide").data('otherOptsDirty');
+  var geoCodeDirty = $("#editorSlide").data('geoCodeDirty');
   var authDict = $("#editorSlide").data("authDict");
   
   //alert(titleDirty + "," + descriptionDirty + "," + tagsDirty);
@@ -582,6 +613,11 @@ $( "#applyEditsButton" ).click(function() {
     
     if (flickrGroupsDirty)
       submitDict["flickrGroups"] = JSON.stringify(flickrGroups);
+  }
+  
+  if (geoCodeDirty)
+  {
+//     TODO - get geo info, submit!
   }
   
   //TODO: just dump the otherOpts for now, need proper notification
@@ -626,6 +662,29 @@ $("#editDescription").editInPlace({
   callback: function(unused, enteredText) { $("#editorSlide").data('descriptionDirty', true); return enteredText; },
   field_type: "textarea",
   show_buttons: true
+});
+
+
+function geoCodeSetEnabled(enableGeoCode)
+{
+  if (enableGeoCode)
+  {
+    $("#latitude").enable();
+    $("#longitude").enable();
+  }
+  else
+  {
+    $("#latitude").disable();
+    $("#longitude").disable();
+  }    
+}
+
+$('#geoCode').click(function() {
+  $("#editorSlide").data('geoCodeDirty', true);
+  if($("#geoCode").is(':checked'))
+    geoCodeSetEnabled(true);
+  else
+    geoCodeSetEnabled(false);
 });
 
 $("#editTags").tagit({

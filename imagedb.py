@@ -312,6 +312,11 @@ class ImageDb:
           self.addTag(tag)
         tagsString = ",".join(meta["tags"])
     
+    #placeholders until the ingestor supports geo
+    geoCode = False
+    latitude = 0
+    longitude = 0
+
     imageTuple = (meta["copyrightNotice"],\
                   meta["author"],\
                   meta["title"],\
@@ -321,7 +326,10 @@ class ImageDb:
                   meta["width"],\
                   meta["height"],\
                   meta["unixTime"],\
-                  tagsString)
+                  tagsString,
+                  geoCode,
+                  latitude,
+                  longitude)
     self.db.execute('insert into image(copyrightNotice,\
                                            author,\
                                            title,\
@@ -331,7 +339,10 @@ class ImageDb:
                                            width,\
                                            height,\
                                            unixTime,\
-                                           tags) values (?,?,?,?,?,?,?,?,?,?)',\
+                                           tags,\
+                                           geoCode,\
+                                           latitude,\
+                                           longitude) values (?,?,?,?,?,?,?,?,?,?,?,?,?)',\
                                            imageTuple)
     
     imageId = self.findImage(meta)
