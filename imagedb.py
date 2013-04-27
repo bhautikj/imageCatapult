@@ -15,7 +15,7 @@ import datetime, time
 
 imagedbpath = os.path.join(paths.appBase, "image.db")
 schemapath = "image.sql"
-jobColumns = ["dburl","width","height","title","description","tags","flickrSets","flickrGroups","jobDict"]
+jobColumns = ["dburl","width","height","title","description","tags","flickrSets","flickrGroups","jobDict","geoCode","latitude","longitude"]
 
 def stringWrap(text):
   if text == None:
@@ -150,6 +150,20 @@ def condenseForEditor(fetchImageListColumns, rows):
   
   returnDict["jobDict"] =  jobServices
   
+  #geoCode - default is no unless all is yes
+  geoCode = True
+  for row in rows:
+    geoCode = row[colIndices["geoCode"]]
+    if geoCode == False:
+      geoCode = False
+  returnDict["geoCode"] = geoCode
+  
+  #poupulate lat and long with first entry. not great,
+  #but an average location is just silly
+  row = rows[0]
+  returnDict["latitude"] = row[colIndices["latitude"]]
+  returnDict["longitude"] = row[colIndices["longitude"]]
+  
   return returnDict
 
 class ImageDb:
@@ -257,7 +271,7 @@ class ImageDb:
     exists = self.db.execute(query)
     return exists
 
-  def setImageList(self, ids, title, description, tags, flickrSets, flickrGroups, jobDict):
+  def setImageList(self, ids, title, description, tags, flickrSets, flickrGroups, jobDict, geoCode, latitude, longitude):
     if title != None:
       query = 'UPDATE image SET title=:title WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
       self.db.execute(query, {"title":title})
@@ -283,6 +297,18 @@ class ImageDb:
       jobDictString = json.dumps(jobDict)
       query = 'UPDATE job SET jobDict=:jobDict WHERE job.imageId IN (' + ','.join(map(str, ids)) + ')'
       self.db.execute(query, {"jobDict":jobDictString})
+
+    if geoCode != None:
+      query = 'UPDATE image SET geoCode=:geoCode WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
+      self.db.execute(query, {"geoCode":geoCode})
+
+    if latitude != None:
+      query = 'UPDATE image SET latitude=:latitude WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
+      self.db.execute(query, {"latitude":latitude})
+      
+    if longitude != None:
+      query = 'UPDATE image SET longitude=:longitude WHERE image.imageId IN (' + ','.join(map(str, ids)) + ')'
+      self.db.execute(query, {"longitude":longitude})
       
     self.db.commit()
 

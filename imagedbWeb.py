@@ -82,7 +82,12 @@ class ImagedbInteraface:
       flickrSets = None
       flickrGroups = None
       jobDict = None
+      geoCode = None
+      latitude = None
+      longitude = None
 
+      print params
+      
       if "title" in params.keys():
         title = json.loads(params["title"])
       if "description" in params.keys():
@@ -95,8 +100,15 @@ class ImagedbInteraface:
         flickrGroups = json.loads(params["flickrGroups"])
       if "jobDict" in params.keys():
         jobDict = json.loads(params["jobDict"])
+      if "geoCode" in params.keys():
+        geoCode = json.loads(params["geoCode"])
+      if "latitude" in params.keys():
+        latitude = json.loads(params["latitude"])
+      if "longitude" in params.keys():
+        longitude = json.loads(params["longitude"])
       
-      imagedb.setImageList(imageIds, title, description, tags, flickrSets, flickrGroups, jobDict)
+      
+      imagedb.setImageList(imageIds, title, description, tags, flickrSets, flickrGroups, jobDict, geoCode, latitude, longitude)
       return json.dumps([])
     elif 'queueJob' in params.keys():
       imageId = params["imageId"]

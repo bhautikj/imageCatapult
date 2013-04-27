@@ -1,17 +1,5 @@
 jQuery.ajaxSettings.traditional = true;
 
-$.fn.disable = function() {
-    return this.each(function() {
-        if (typeof this.disabled != "undefined") this.disabled = true;
-    });
-}
-
-$.fn.enable = function() {
-    return this.each(function() {
-        if (typeof this.disabled != "undefined") this.disabled = false;
-    });
-}
-
 $(function() {
   $( "#flickrSets" ).selectable({
     unselected: function(event, ui) { $("#editorSlide").data('flickrSetsDirty', true); },
@@ -22,10 +10,17 @@ $(function() {
     selected: function(event, ui) { $("#editorSlide").data('flickrGroupsDirty', true); }                          
   });
   
+
+  $("#latitude").filter_input({regex:'[0-9.]'}); 
+  $("#longitude").filter_input({regex:'[0-9.]'}); 
+
   $("#latitude").button().addClass('styledInput');
   $("#longitude").button().addClass('styledInput');
   
+  
   $("#templateList").selectable();
+
+  setInterval( "slideSwitch()", 8000 );
 });
 
 function showUploadImages()
@@ -93,10 +88,6 @@ function slideSwitch() {
       $active.removeClass('active last-active');
   });
 }
-
-$(function() {
-  setInterval( "slideSwitch()", 8000 );
-});
 
 $("#uploadImagesButton").click(function () {
   showUploadImages();
@@ -198,7 +189,7 @@ $( "#editButton" ).click(function() {
   {
     $("#flickrOpts").show();
     // flickr is default - don't make it uncheckable for now
-    $("#flickrCheck").attr("disabled", true);
+    $("#flickrCheck").prop('disabled', true);
   }
   else
   {
@@ -213,7 +204,7 @@ $( "#editButton" ).click(function() {
     if (authDict[service] != true)
     {
       $("#" + serviceId).prop('checked', false);
-      $("#" + serviceId).attr('disabled', true);
+      $("#" + serviceId).prop('disabled', true);
       $("#" + serviceId).hide();
     }
     else
@@ -326,6 +317,12 @@ $( "#editButton" ).click(function() {
       
       $( "#otherOpts" ).buttonset();
 
+      $("#latitude").val(response.latitude);
+      $("#longitude").val(response.longitude);
+      $("#geoCode").prop('checked', response.geoCode);
+      
+      geoCodeSetEnabled(response.geoCode);      
+      
     }, 'json');
     
   
@@ -427,9 +424,21 @@ $("#submitLoadTemplate").click(function() {
         var geoCode = data.geoCode;
         if (geoCode != undefined)
         {
-          
           $("#editorSlide").data('geoCodeDirty', true);
-  //         TODO: set geo
+          $("#geoCode").prop('checked', geoCode);
+          geoCodeSetEnabled(geoCode);      
+        }
+        
+        var latitude = data.latitude;
+        if (latitude != undefined)
+        {
+          $("#latitude").val(latitude);
+        }
+        
+        var longitude = data.longitude;
+        if (longitude != undefined)
+        {
+          $("#longitude").val(longitude);
         }
       }
       
@@ -489,7 +498,9 @@ $("#submitSaveTemplate").click(function() {
   
   if (geoCodeCheck)
   {
-      //TODO: SET GEO OPTS
+    templateDict["geoCode"] = $("#geoCode").is(":checked");
+    templateDict["latitude"] = $("#latitude").val();
+    templateDict["longitude"] = $("#longitude").val();
   }
 
   $.ajax({
@@ -617,7 +628,9 @@ $( "#applyEditsButton" ).click(function() {
   
   if (geoCodeDirty)
   {
-//     TODO - get geo info, submit!
+    submitDict["geoCode"] = $("#geoCode").is(":checked");
+    submitDict["latitude"] = $("#latitude").val();
+    submitDict["longitude"] = $("#longitude").val();
   }
   
   //TODO: just dump the otherOpts for now, need proper notification
@@ -631,7 +644,7 @@ $( "#applyEditsButton" ).click(function() {
   
   var jobDictString = JSON.stringify(jobDict);
   submitDict["jobDict"] = jobDictString;
-
+  
   $.post('../image', 
     submitDict, 
     function(response) {    
@@ -669,23 +682,24 @@ function geoCodeSetEnabled(enableGeoCode)
 {
   if (enableGeoCode)
   {
-    $("#latitude").enable();
-    $("#longitude").enable();
+    $("#longitude").prop('disabled', false);
+    $("#latitude").prop('disabled', false);
   }
   else
   {
-    $("#latitude").disable();
-    $("#longitude").disable();
+    $("#longitude").prop('disabled', true);
+    $("#latitude").prop('disabled', true);
   }    
 }
 
-$('#geoCode').click(function() {
+$("#geoCode").click(function() {
   $("#editorSlide").data('geoCodeDirty', true);
   if($("#geoCode").is(':checked'))
     geoCodeSetEnabled(true);
   else
     geoCodeSetEnabled(false);
 });
+
 
 $("#editTags").tagit({
 autocomplete: { source: function( request, response ) {
