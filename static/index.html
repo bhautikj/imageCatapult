@@ -72,6 +72,9 @@
       <label for="geoCode" class="inlineElem">GeoCode:</label><input type="checkbox" id="geoCode" class="inlineElem"/>
       <label for="latitude" class="inlineElem">Latitude:</label><input class="inlineElem" id="latitude"></input>
       <label for="longitude" class="inlineElem">Longitude:</label><input class="inlineElem" id="longitude"></input>
+      <br/>
+      <label for="addresspicker_map">Address : </label><input id="addresspicker_map" />
+      <div id="map"></div>
     <br/></div>
     
     <div class="templateEdit" id="templateOpts">
@@ -174,9 +177,13 @@
 <script src="js/tag-it.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
 
+<!-- limit input to regexes -->
 <script src="js/jquery.filter_input.js"></script>
 
-
+<!-- map picker for geo -->
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="js/jquery.ui.addresspicker.js"></script>
+  
 <!-- Custom jquery setup -->
 <script src="js/fileupload.js"></script>
 <script src="js/auth.js"></script>

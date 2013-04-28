@@ -340,6 +340,7 @@ $( "#editButton" ).click(function() {
   $("#editBox").data("selectedImages", selectedImages);
   
   showEditor();
+  setupMap();
 });
 
 $( "#toggleTemplatesButton" ).click(function() {
@@ -677,6 +678,28 @@ $("#editDescription").editInPlace({
   show_buttons: true
 });
 
+
+function showCallback(geocodeResult, parsedGeocodeResult){
+  alert("CHANGE");
+}
+
+
+function setupMap()
+{
+    var addresspickerMap = $( "#addresspicker_map" ).addresspicker({
+    regionBias: "gb",
+    updateCallback: showCallback,
+    elements: {
+      map: "#map",
+      lat: "#latitude",
+      lng: "#longitude"
+    }
+  });
+
+  var gmarker = addresspickerMap.addresspicker( "marker");
+  gmarker.setVisible(true);
+  addresspickerMap.addresspicker( "reloadPosition");
+}
 
 function geoCodeSetEnabled(enableGeoCode)
 {
