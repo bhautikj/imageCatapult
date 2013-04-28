@@ -138,6 +138,15 @@ $( "#deleteImagesButton").click(function() {
   refreshImages($( "#dbImageList" ));
 });
 
+function sortList (mylist)
+{
+  var listitems = mylist.children('li').get();
+  listitems.sort(function(a, b) {
+    return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+  });
+  $.each(listitems, function(idx, itm) { mylist.append(itm); });
+}
+
 $( "#editButton" ).click(function() {
   var selectedImages = [];
   $('#dbImageList .ui-selected').each(function(){
@@ -235,6 +244,7 @@ $( "#editButton" ).click(function() {
           li.text(response[key]);
           $('#flickrSets').append(li);
         }
+        sortList($("#flickrSets"));
       }
     });
     
@@ -252,6 +262,7 @@ $( "#editButton" ).click(function() {
           li.text(response[key]);
           $('#flickrGroups').append(li);
         }
+        sortList($("#flickrGroups"));
       }
     });
   }
