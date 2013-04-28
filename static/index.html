@@ -44,30 +44,43 @@
     <img src="" width="100%" alt="../imagestore/20091128/115145.jpg" class="active" />
   </div>
   <div id="editOpts">
-    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="titleCheck" class="inlineElem"/></div>
-    <div class="inlineElem" id="editTitle">TITLE</div><br/>
-    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="descriptionCheck" class="inlineElem"/></div>
-    <div class="inlineElem" id="editDescription">DESCRIPTION</div><br/><br/>
-    <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="tagsCheck" class="inlineElem"/></div>
-    <div ><ul id="editTags"  ></ul><br/></div>
-    
-    <div id="otherOpts">
-      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="otherOptsCheck" class="inlineElem"/></div>
-      Post to: 
-      <label for="flickrCheck">flickr</label><input type="checkbox" id="flickrCheck"/>
-      <label for="facebookCheck">facebook</label><input type="checkbox" id="facebookCheck"/>
-      <label for="tumblrCheck">tumblr</label><input type="checkbox" id="tumblrCheck"/>
-      <label for="twitterCheck">twitter</label><input type="checkbox" id="twitterCheck"/>
+  
+    <button class="inlineElem" id="standardOptsShow">Standard Options</button>
+    <div id="standardOpts">
+      <a href="#" id="standardOptsHide" class="floatRight">x</a>
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="titleCheck" class="inlineElem"/></div>
+      <div class="inlineElem" id="editTitle">TITLE</div><br/>
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="descriptionCheck" class="inlineElem"/></div>
+      <div class="inlineElem" id="editDescription">DESCRIPTION</div><br/><br/>
+      <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="tagsCheck" class="inlineElem"/></div>
+      <div ><ul id="editTags"  ></ul></div>
     <br/></div>
     
+    <button class="inlineElem" id="servicesOptsShow">Services Options</button>
+    <div id="servicesOpts">
+      <a href="#" id="servicesOptsHide" class="floatRight">x</a>
+      <div id="otherOpts">
+        <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="otherOptsCheck" class="inlineElem"/></div>
+        Post to: 
+        <label for="flickrCheck">flickr</label><input type="checkbox" id="flickrCheck"/>
+        <label for="facebookCheck">facebook</label><input type="checkbox" id="facebookCheck"/>
+        <label for="tumblrCheck">tumblr</label><input type="checkbox" id="tumblrCheck"/>
+        <label for="twitterCheck">twitter</label><input type="checkbox" id="twitterCheck"/>
+      </div><br/>
+    </div>
+    
+    <button class="inlineElem" id="flickrOptsShow">Flickr Options</button>
     <div id="flickrOpts">
+      <a href="#" id="flickrOptsHide" class="floatRight">x</a>
       <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="flickrSetsCheck" class="inlineElem"/></div>
       <div class="inlineElem">Sets:</div><ol class="selectList inlineElem" id="flickrSets"></ol>
       <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="flickrGroupsCheck" class="inlineElem"/></div>
       <div class="inlineElem">Groups:</div><ol class="selectList inlineElem" id="flickrGroups"></ol>
     <br/></div>
     
+    <button class="inlineElem" id="geoCodeOptsShow">Geocode Options</button>
     <div id="geoCodeOpts">
+      <a href="#" id="geoCodeOptsHide" class="floatRight">x</a>
       <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="geoCodeCheck" class="inlineElem"/></div>
       <label for="geoCode" class="inlineElem">GeoCode:</label><input type="checkbox" id="geoCode" class="inlineElem"/>
       <label for="latitude" class="inlineElem">Latitude:</label><input class="inlineElem" id="latitude"></input>
@@ -104,7 +117,6 @@
 
   </div>
 </div>
-
 
 
 <div id="uploadImages">

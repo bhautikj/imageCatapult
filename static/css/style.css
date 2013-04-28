@@ -47,6 +47,17 @@ select{
   padding: 2px;
 }
 
+.floatRight
+{
+  float:right;
+}
+
+.floatRight { color: #FFFFFF; }
+.floatRight link {text-decoration: none}
+.floatRight visited {text-decoration: none}
+.floatRight active {text-decoration: none}
+.floatRight hover {text-decoration: underline; color: red;}
+
 .menuBox A { color: #FFFFFF; }
 .menuBox A:link {text-decoration: none}
 .menuBox A:visited {text-decoration: none}
@@ -68,10 +79,6 @@ select{
   padding: 0px;
   margin: 0px;
   overflow:hidden;
-}
-
-#editBox {
-  overflow: hidden;
 }
 
 #uploadImages
@@ -118,6 +125,12 @@ select{
   height: 100%;
 }
 
+#editBox 
+{
+  overflow: hidden;
+}
+
+
 #editBox #editOpts {
   padding: 5px;
   position: absolute; 
@@ -131,8 +144,7 @@ select{
   opacity: 0.5;
   color: #FFFFFF;
   font-size: 100%;
-  width: 100%;
-  
+  width: 700px;
 }
 
 #editBox #templateOpts
@@ -143,10 +155,28 @@ select{
 /*   opacity: 0.4; */
 }
 
+#editBox #standardOpts
+{
+  padding: 5px;
+  width: 100%;
+}
+
+#editBox #servicesOpts
+{
+  padding: 5px;
+  width: 100%;
+}
+
 #editBox #flickrOpts
 {
   padding: 5px;
-/*   opacity: 0.4; */
+  width: 100%;
+}
+
+#editBox #geoCodeOpts
+{
+  padding: 5px;
+  width: 100%;
 }
 
 #editBox #editTitle
@@ -191,11 +221,12 @@ select{
 
 .selectList 
 {
-  height: 200px;
+  max-height: 200px;
   width: 250px;
   overflow: auto;
   display: inline-block;
 }
+
 
 .selectList .ui-selecting { background: #FECA40; }
 .selectList .ui-selected { background: #F39814; color: white; }
@@ -224,3 +255,4 @@ select{
   margin: 10px 0 10px 0;
   -webkit-box-shadow: #AAA 0px 0px 15px;
 }
+

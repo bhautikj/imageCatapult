@@ -330,10 +330,7 @@ $( "#editButton" ).click(function() {
 
       $("#latitude").val(response.latitude);
       $("#longitude").val(response.longitude);
-      $("#geoCode").prop('checked', response.geoCode);
-      
-      geoCodeSetEnabled(response.geoCode);      
-      
+      $("#geoCode").prop('checked', response.geoCode);      
     }
   });   
   
@@ -350,8 +347,60 @@ $( "#editButton" ).click(function() {
   $("#toggleTemplatesButton").data("shown",false);  
   $("#editBox").data("selectedImages", selectedImages);
   
+  $("#standardOptsShow").hide();
+  $("#standardOpts").show();
+  $("#servicesOptsShow").hide();
+  $("#servicesOpts").show();
+  $("#flickrOptsShow").show();
+  $("#flickrOpts").hide();
+  $("#geoCodeOptsShow").show();
+  $("#geoCodeOpts").hide();
+  
   showEditor();
   setupMap();
+});
+
+$("#standardOptsShow").click(function () {
+  $("#standardOptsShow").hide("fast");
+  $("#standardOpts").show("fast");
+});
+
+$("#standardOptsHide").click(function () {
+  $("#standardOpts").hide("fast");
+  $("#standardOptsShow").show("fast");
+});
+
+$("#servicesOptsShow").click(function () {
+  $("#servicesOptsShow").hide("fast");
+  $("#servicesOpts").show("fast");
+});
+
+$("#servicesOptsHide").click(function () {
+  $("#servicesOpts").hide("fast");
+  $("#servicesOptsShow").show("fast");
+});
+
+$("#flickrOptsShow").click(function () {
+  $("#flickrOptsShow").hide("fast");
+  $("#flickrOpts").show("fast");
+});
+
+$("#flickrOptsHide").click(function () {
+  $("#flickrOpts").hide("fast");
+  $("#flickrOptsShow").show("fast");
+});
+
+$("#geoCodeOptsShow").click(function () {
+  $("#geoCodeOptsShow").hide("fast");
+  $("#geoCodeOpts").show("fast");
+  //$("#addresspicker_map").addresspicker( "reloadPosition");
+  var map = $( "#addresspicker_map" ).addresspicker( "map" );
+  google.maps.event.trigger(map, 'resize');
+});
+
+$("#geoCodeOptsHide").click(function () {
+  $("#geoCodeOpts").hide("fast");
+  $("#geoCodeOptsShow").show("fast");
 });
 
 $( "#toggleTemplatesButton" ).click(function() {
@@ -723,6 +772,10 @@ function geoCodeSetEnabled(enableGeoCode)
     $("#longitude").prop('disabled', false);
     $("#latitude").prop('disabled', false);
     $("#gmap").show("fast");
+    
+    //$( "#addresspicker_map" ).addresspicker( "reloadPosition");
+    var map = $( "#addresspicker_map" ).addresspicker( "map" );
+    google.maps.event.trigger(map, 'resize');
   }
   else
   {

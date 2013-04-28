@@ -124,6 +124,10 @@ class FlickrObject(OAuthObjectBase):
 
     return add_photo["photoid"]
 
+  def setLocation(self, photoId, latitude, longitude):
+    params = {"photo_id":photoId, "lat":latitude, "lon":longitude}
+    result = self.flickrAPI.get("flickr.photos.geo.setLocation", params)
+    
   def sendToGroups(self, photoId, groupList):
     if groupList == None:
       return

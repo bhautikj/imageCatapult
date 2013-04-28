@@ -48,6 +48,9 @@ def postJob(jobId):
     jobDict["flickrSets"] = jobDict["flickrSets"].split(",")
   if jobDict["flickrGroups"] != None:
     jobDict["flickrGroups"] = jobDict["flickrGroups"].split(",")
+  jobDict["geoCode"] = int(jobDict["geoCode"])
+  jobDict["latitude"] = float(jobDict["latitude"])
+  jobDict["longitude"] = float(jobDict["longitude"])
     
   serviceDict = jobDict["jobDict"]
   jobStatus = {"flickr":False, "facebook": False, "tumblr": False, "twitter": False}
@@ -116,7 +119,13 @@ def postFlickrImage(jobDict):
     photoid = flickrObject.postImage(jobDict)
   except:
     raise Exception("photo upload error, giving up")
-  
+ 
+  if jobDict["geoCode"] != 0:
+    try:
+      flickrObject.setLocation(photoid, jobDict["latitude"], jobDict["longitude"])
+    except:
+      print "ERROR IN SETTING LOCATION - you may need to set pref at http://www.flickr.com/account/geo/privacy/"
+
   try:
     flickrObject.sendToGroups(photoid, jobDict["flickrGroups"])
   except:
