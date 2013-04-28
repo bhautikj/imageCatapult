@@ -16,6 +16,8 @@ $(function() {
 
   $("#latitude").button().addClass('styledInput');
   $("#longitude").button().addClass('styledInput');
+
+  $("#addresspicker_map").button().addClass('styledInput');
   
   
   $("#templateList").selectable();
@@ -189,7 +191,7 @@ $( "#editButton" ).click(function() {
   {
     $("#flickrOpts").show();
     // flickr is default - don't make it uncheckable for now
-    $("#flickrCheck").prop('disabled', true);
+//     $("#flickrCheck").prop('disabled', true);
   }
   else
   {
@@ -209,6 +211,8 @@ $( "#editButton" ).click(function() {
     }
     else
     {
+      $("#" + serviceId).prop('checked', true);
+      $("#" + serviceId).prop('disabled', false);
       $("#" + serviceId).show();
     }
 
@@ -252,9 +256,13 @@ $( "#editButton" ).click(function() {
     });
   }
   
-  $.post('../image', 
-    {selectedList:JSON.stringify(selectedImages)}, 
-    function(response) {    
+  $.ajax({
+    type: 'POST',
+    url: '../image',
+    data: {selectedList:JSON.stringify(selectedImages)},
+    dataType: 'json',
+    async:false,
+    success: function(response) {    
       $.each(response.imageList, function (index, image) {
         var img = $('<img id="dynamic">');
         img.attr('src', image.url);
@@ -309,6 +317,9 @@ $( "#editButton" ).click(function() {
       {
         for (var service in response.jobDict)
         {
+          if (service == "flickr")
+            $("#" + service + "Check").prop('disabled', true);
+          
           $("#" + service + "Check").prop('checked', response.jobDict[service]);
           // state has been set, now create button
           $("#" + service + "Check").button();
@@ -323,8 +334,8 @@ $( "#editButton" ).click(function() {
       
       geoCodeSetEnabled(response.geoCode);      
       
-    }, 'json');
-    
+    }
+  });   
   
   $("#editorSlide").data('authDict', authDict);
   $("#editorSlide").data('titleDirty', false);
@@ -680,13 +691,14 @@ $("#editDescription").editInPlace({
 
 
 function showCallback(geocodeResult, parsedGeocodeResult){
-  alert("CHANGE");
+  $("#editorSlide").data('geoCodeDirty', true);
 }
 
 
 function setupMap()
 {
-    var addresspickerMap = $( "#addresspicker_map" ).addresspicker({
+  $("#addresspicker_map").val("");
+  var addresspickerMap = $( "#addresspicker_map" ).addresspicker({
     regionBias: "gb",
     updateCallback: showCallback,
     elements: {
@@ -699,6 +711,9 @@ function setupMap()
   var gmarker = addresspickerMap.addresspicker( "marker");
   gmarker.setVisible(true);
   addresspickerMap.addresspicker( "reloadPosition");
+  
+  // we need to mark the map dirty if we move it
+  google.maps.event.addListener(gmarker, 'dragend', showCallback);
 }
 
 function geoCodeSetEnabled(enableGeoCode)
@@ -707,11 +722,13 @@ function geoCodeSetEnabled(enableGeoCode)
   {
     $("#longitude").prop('disabled', false);
     $("#latitude").prop('disabled', false);
+    $("#gmap").show("fast");
   }
   else
   {
     $("#longitude").prop('disabled', true);
     $("#latitude").prop('disabled', true);
+    $("#gmap").hide("fast");
   }    
 }
 

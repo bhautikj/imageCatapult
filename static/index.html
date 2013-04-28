@@ -54,10 +54,10 @@
     <div id="otherOpts">
       <div class="templateEdit ui-checkbox inlineElem"><input type="checkbox" id="otherOptsCheck" class="inlineElem"/></div>
       Post to: 
-      <input type="checkbox" id="flickrCheck"></input><label for="flickrCheck">flickr</label>
-      <input type="checkbox" id="facebookCheck"></input><label for="facebookCheck">facebook</label>
-      <input type="checkbox" id="tumblrCheck"></input><label for="tumblrCheck">tumblr</label>
-      <input type="checkbox" id="twitterCheck"></input><label for="twitterCheck">twitter</label>
+      <label for="flickrCheck">flickr</label><input type="checkbox" id="flickrCheck"/>
+      <label for="facebookCheck">facebook</label><input type="checkbox" id="facebookCheck"/>
+      <label for="tumblrCheck">tumblr</label><input type="checkbox" id="tumblrCheck"/>
+      <label for="twitterCheck">twitter</label><input type="checkbox" id="twitterCheck"/>
     <br/></div>
     
     <div id="flickrOpts">
@@ -73,8 +73,9 @@
       <label for="latitude" class="inlineElem">Latitude:</label><input class="inlineElem" id="latitude"></input>
       <label for="longitude" class="inlineElem">Longitude:</label><input class="inlineElem" id="longitude"></input>
       <br/>
-      <label for="addresspicker_map">Address : </label><input id="addresspicker_map" />
-      <div id="map"></div>
+      <span id="gmap" class="inlineElem">
+        <label for="addresspicker_map">Address lookup:</label><input id="addresspicker_map" /><div id="map"></div>
+      </span>
     <br/></div>
     
     <div class="templateEdit" id="templateOpts">
@@ -97,6 +98,10 @@
       <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
     <div style="clear: both;"></div>
     </div>
+    
+    <br/>
+    <br/>
+
   </div>
 </div>
 
