@@ -104,7 +104,7 @@ function setupCalendar()
 
   while (fromDate < toDate)
   {
-    var hour = 9;
+    var hour = 2;
     var minute = 0;
     var dayDate = new Date(fromDate);
     var day = dayDate.getDate();
