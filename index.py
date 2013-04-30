@@ -5,7 +5,7 @@ from imagedbWeb import imagedbApp
 from tagsWeb import tagsApp
 from templateWeb import templateApp
 from flickrInterface import flickrApp
-from newsHALWeb import newsHALApp
+#from newsHALWeb import newsHALApp
 import paths
 import job
 
@@ -20,8 +20,8 @@ urls = (
   '/image', imagedbApp,
   '/tags', tagsApp,
   '/template', templateApp,
-  '/flickr', flickrApp,
-  '/newsHAL', newsHALApp
+  '/flickr', flickrApp
+  #'/newsHAL', newsHALApp
 )
 
 render = web.template.render('templates/')
