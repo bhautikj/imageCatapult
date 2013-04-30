@@ -181,7 +181,7 @@ class RunJobs(threading.Thread):
       now = datetime.datetime.now()
       print "Running pending jobs at time: %s" % (now)
       postPendingJobs()
-      updateNewsHAL()
+      #updateNewsHAL()
       time.sleep(interval*minuteSeconds)
 
 runJobsThread = RunJobs()
