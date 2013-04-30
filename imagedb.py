@@ -262,7 +262,7 @@ class ImageDb:
       except:
         print "unable to delete file: " + str(delpath)
         pass
-    
+    self.db.commit()
 
   def fetchImageList(self, fetchImageListColumns, ids):    
     cols = ",".join(fetchImageListColumns)
