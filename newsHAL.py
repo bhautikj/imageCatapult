@@ -35,4 +35,5 @@ def feedHAL():
     except:
       pass
   newshal.sync()
+  print "NEWSHAL FED!"
 
