@@ -148,6 +148,8 @@ function sortList (mylist)
 }
 
 $( "#editButton" ).click(function() {
+  // pre-populate title spew box
+  populateSpew();
   var selectedImages = [];
   $('#dbImageList .ui-selected').each(function(){
     var imgid =  $(this).children("img").attr("dbid");
@@ -837,11 +839,11 @@ afterTagRemoved: function(event, ui) {
 
 });
 
-
-$("#spewTitle").click(function () {
+function populateSpew()
+{
   $.ajax({
     url: "../spew",
-    async: false,
+    async: true,
     dataType: "json",
     data: {"getspew":0,
            "num":10 },
@@ -864,7 +866,8 @@ $("#spewTitle").click(function () {
       }
     }
   });
-  
-});
+}
 
-// $('#spewTitle').click (function
+$("#spewTitle").click(function () {
+  populateSpew();  
+});
