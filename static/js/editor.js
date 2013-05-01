@@ -836,3 +836,35 @@ afterTagRemoved: function(event, ui) {
 }
 
 });
+
+
+$("#spewTitle").click(function () {
+  $.ajax({
+    url: "../spew",
+    async: false,
+    dataType: "json",
+    data: {"getspew":0,
+           "num":10 },
+    success: function( response ) {
+      var nresp = response.length;
+      var html = $("#wordspew ul").html("");
+      var base = $("#wordspew ul");
+      for (var i=0; i<nresp; i++)
+      {
+        var li = $('<li>');
+        var a = $('<a>');
+        a.attr("href", "#");
+        a.text(response[i]);
+        a.appendTo(li);
+        li.appendTo(base);
+        a.click(function () {
+          $("#editTitle").text($(this).text());
+          $("#editorSlide").data('titleDirty', true);
+        });
+      }
+    }
+  });
+  
+});
+
+// $('#spewTitle').click (function

@@ -6,6 +6,7 @@ from tagsWeb import tagsApp
 from templateWeb import templateApp
 from flickrInterface import flickrApp
 #from newsHALWeb import newsHALApp
+from wordspewWeb import wordspewApp
 import paths
 import job
 
@@ -20,7 +21,8 @@ urls = (
   '/image', imagedbApp,
   '/tags', tagsApp,
   '/template', templateApp,
-  '/flickr', flickrApp
+  '/flickr', flickrApp,
+  '/spew', wordspewApp
   #'/newsHAL', newsHALApp
 )
 
