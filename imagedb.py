@@ -390,7 +390,7 @@ class ImageDb:
     if minDate == None and maxDate != None:
       query += ' WHERE '
     if maxDate != None:
-      query += ' unixtime < ' + str(maxDate)
+      query += ' unixTime < ' + str(maxDate)
  
     query += ' ORDER BY unixTime ASC '
 
@@ -433,7 +433,7 @@ class ImageDb:
     self.db.commit()
 
   def listAllJobs(self, status, minDate=None, maxDate=None):
-    query = "SELECT imageId, dburl, jobTime FROM image NATURAL JOIN job WHERE image.imageId = job.imageId AND status = :status"
+    query = "SELECT imageId, dburl, jobTime, unixTime FROM image NATURAL JOIN job WHERE image.imageId = job.imageId AND status = :status"
     if minDate != None and maxDate != None:
       query += ' AND jobTime > ' + str(minDate) + ' AND jobTime < ' + str(maxDate)
  

@@ -72,6 +72,9 @@ function populatePanes()
     success: function(json) {
       $.each(json, function (e, y) {
         var li = createImageListElement(y);
+        li.attr("jobTime",y[2]);
+        li.attr("unixTime",y[3]);
+        li.attr("candidate",true);
         $( "#jobCandidates").append(li);
       });
     }
@@ -89,6 +92,8 @@ function populatePanes()
       $.each(json, function (e, y) {
         var li = createImageListElement(y);
         li.attr("jobTime",y[2]);
+        li.attr("unixTime",y[3]);
+        li.attr("candidate",false);
         $( "#jobQueued").append(li);
       });
     }
@@ -184,6 +189,7 @@ function commitJobs()
   
   $("#jobCandidates li").each (function (index, li) {
     var dbid = jQuery(this).find("img").attr("dbid");
+    var candidate = jQuery(this).attr("candidate");
     
     submitDict = {}
     submitDict["queueJob"] = 0;
@@ -191,11 +197,16 @@ function commitJobs()
     submitDict["status"] = "pending";
     submitDict["jobTime"] = 0;
     
-    $.post('../image', 
-    submitDict, 
-    function(response) {    
-      //no-op, probably
-    }, 'json');   
+    alert(candidate);
+    if (candidate == "false")
+    {
+      alert("moved job!");
+      $.post('../image', 
+      submitDict, 
+      function(response) {    
+        //no-op, probably
+      }, 'json');  
+    }
   });
 }
 
@@ -214,14 +225,23 @@ function setupJobsPane()
   setupCalendar();
   populatePanes();  
 
-  var mylist = $('#jobQueued');
-  var listitems = mylist.children('li').get();
+  var jobQueuedList = $('#jobQueued');
+  var listitems = jobQueuedList.children('li').get();
   listitems.sort(function(a, b) {
     var aAttr = $(a).attr("jobTime");
     var bAttr = $(b).attr("jobTime"); 
     return parseInt(aAttr)>parseInt(bAttr);
   });
-  $.each(listitems, function(idx, itm) { mylist.append(itm); });
+  $.each(listitems, function(idx, itm) { jobQueuedList.append(itm); });
+
+  var jobCandidatesList = $('#jobQueued');
+  var listitems = jobCandidatesList.children('li').get();
+  listitems.sort(function(a, b) {
+    var aAttr = $(a).attr("unixTime");
+    var bAttr = $(b).attr("unixTime"); 
+    return parseInt(aAttr)>parseInt(bAttr);
+  });
+  $.each(listitems, function(idx, itm) { jobCandidatesList.append(itm); });
   
   $( "#jobCandidates, #jobQueued" ).sortable({
     connectWith: ".connectedSortable",
