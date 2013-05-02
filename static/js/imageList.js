@@ -31,6 +31,7 @@ function createImageListElement(data)
 {
   var li = $('<li>');
   li.attr('class','ui-widget-content')
+  li.addClass(data[2]);
   var img = $('<img id="dynamic">');
   img.attr('src', data[1] + '.thumb.jpg');
   img.attr('dbid',data[0]);
