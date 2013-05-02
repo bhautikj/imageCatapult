@@ -392,7 +392,7 @@ class ImageDb:
     if maxDate != None:
       query += ' unixTime < ' + str(maxDate)
  
-    query += ' ORDER BY unixTime ASC '
+    query += ' ORDER BY unixTime DESC '
 
     exists = self.db.execute(query)
     if len(exists) == 0:

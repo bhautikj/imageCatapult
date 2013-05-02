@@ -234,12 +234,12 @@ function setupJobsPane()
   });
   $.each(listitems, function(idx, itm) { jobQueuedList.append(itm); });
 
-  var jobCandidatesList = $('#jobQueued');
+  var jobCandidatesList = $('#jobCandidates');
   var listitems = jobCandidatesList.children('li').get();
   listitems.sort(function(a, b) {
     var aAttr = $(a).attr("unixTime");
     var bAttr = $(b).attr("unixTime"); 
-    return parseInt(aAttr)>parseInt(bAttr);
+    return parseInt(aAttr)<parseInt(bAttr);
   });
   $.each(listitems, function(idx, itm) { jobCandidatesList.append(itm); });
   
