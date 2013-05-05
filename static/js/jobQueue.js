@@ -197,10 +197,8 @@ function commitJobs()
     submitDict["status"] = "pending";
     submitDict["jobTime"] = 0;
     
-    alert(candidate);
     if (candidate == "false")
     {
-      alert("moved job!");
       $.post('../image', 
       submitDict, 
       function(response) {    
