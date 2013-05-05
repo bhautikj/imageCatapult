@@ -1,8 +1,41 @@
 .imageList .ui-selecting { background: #FECA40; }
 .imageList .ui-selected { background: #F39814; color: white; }
-.imageList { list-style-type: none; margin: 0; padding: 2px;}
+.imageList { list-style-type: none; margin: 0; padding: 2px; }
+.imageList li { position: relative; /*z-index: 10;*/}
 .dateHeader { background: #444444; border: 1px; border-style:solid; border-color:#bbbbbb; }
 .dateHeader, .imageList li { margin: 0px; padding: 5px; font-size: 1.4em; height: 200px; width:200px; display: inline-block; vertical-align:middle;}
 
 #jobCandidatesDiv { width:240px; height:100%; overflow:auto; float: left; }
 #jobListDiv { height:100%; overflow:auto; }
+
+
+.jobTimeStamp
+{
+  position: absolute;
+  font-size: 80%;
+  top: 2px; 
+  left: 2px;
+  width: 80px;
+/*   z-index: 12; */
+}
+
+.triangle
+{
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  top: 0px;
+  left: 0px;
+  border-top: 100px solid #227;
+  border-right: 100px solid transparent;
+  filter:alpha(opacity=80);
+  -moz-opacity:0.8;
+  -khtml-opacity: 0.8;
+  opacity: 0.8;
+/*   z-index: 11; */
+}
+
+.queued 
+{
+  background: #227;
+}

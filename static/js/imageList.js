@@ -27,15 +27,51 @@ $(function() {
   refreshImages($( "#dbImageList" ));
 });
 
+function timestampToDate(stamp)
+{
+
+  var date = new Date(stamp*1000);
+//   var hours = date.getHours();
+//   var minutes = date.getMinutes();
+//   var seconds = date.getSeconds();
+//   
+//   var year = date.getFullYear();
+//   var month = date.getMonth() + 1;
+//   var date = date.getDate();
+// 
+//   var formattedTime = hours + ':' + minutes + ':' + seconds;
+//   var formattedDate = date + '/' + month + '/' + year;
+//   
+//   return formattedTime + ' ' + formattedDate; 
+  
+  return date.toLocaleString("en-GB");
+}
+
 function createImageListElement(data)
 {
   var li = $('<li>');
   li.attr('class','ui-widget-content')
   li.addClass(data[2]);
+  
+  if (data[2] == 'queued')
+  {
+    if (data[3] != 0)
+    {
+      var triangle = $('<div>');
+      triangle.addClass('triangle');
+      triangle.appendTo(li);
+      var jobTime = $('<span>');
+      jobTime.addClass('jobTimeStamp');
+      jobTime.text(timestampToDate(data[3]));
+      jobTime.appendTo(li);
+    }
+  }
+
   var img = $('<img id="dynamic">');
   img.attr('src', data[1] + '.thumb.jpg');
   img.attr('dbid',data[0]);
   img.appendTo(li);
+
   return li;
 }
 

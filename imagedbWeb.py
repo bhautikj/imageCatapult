@@ -30,8 +30,8 @@ class ImagedbInteraface:
         return json.dumps(ret)
       
       for i in dbList:
-        #image ID, image URL, status
-        entry = (int(i[0]), "../imagestore/" + str(i[1]), str(i[2])) 
+        #image ID, image URL, status, jobtime
+        entry = (int(i[0]), "../imagestore/" + str(i[1]), str(i[2]), str(i[3])) 
         ret.append(entry)
       return json.dumps(ret)
     elif "jobList" in params.keys():
