@@ -43,7 +43,6 @@ function timestampToDate(stamp)
 //   var formattedDate = date + '/' + month + '/' + year;
 //   
 //   return formattedTime + ' ' + formattedDate; 
-  
   return date.toLocaleString("en-GB");
 }
 
@@ -57,9 +56,9 @@ function createImageListElement(data)
   {
     if (data[3] != 0)
     {
-      var triangle = $('<div>');
-      triangle.addClass('triangle');
-      triangle.appendTo(li);
+      var queuedTag = $('<div>');
+      queuedTag.addClass('queuedTag');
+      queuedTag.appendTo(li);
       var jobTime = $('<span>');
       jobTime.addClass('jobTimeStamp');
       jobTime.text(timestampToDate(data[3]));

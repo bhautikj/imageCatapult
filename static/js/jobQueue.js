@@ -1,3 +1,6 @@
+
+var timeDelay = 5 * 60 * 1000; //5 mins
+      
 $.widget( "ui.timespinner", $.ui.spinner, {
   options: {
     // seconds
@@ -144,29 +147,11 @@ function commitJobs()
   var initialised = false;
   
   $("#jobQueued li").each (function (index, li) {
-    if ($(this).hasClass("fixed"))
+    if ($(this).hasClass("fixed") == false)
     {
-      hour = $(this).attr("hour");
-      minute = $(this).attr("minute");
-      day = $(this).attr("day");
-      month = $(this).attr("month");
-      year = $(this).attr("year");
-      currDate = new Date(year,month,day,hour,minute,0,0);
-      initialised = true;
-      nQueued += 1;
-    }
-    else
-    {
-      if (initialised == false)
-      {
-        alert("UNQUEUEABLE IMAGE: no date assigned!");
-        return true;
-      }
-      var dateString = currDate.toDateString();
-      var timeString = currDate.toTimeString();
       var dbid = jQuery(this).find("img").attr("dbid");
       var status = 'queued';
-      var timeStamp = currDate.getTime() / 1000.0; 
+      var timeStamp = jQuery(this).attr("jobTime");
       
       submitDict = {}
       submitDict["queueJob"] = 0;
@@ -179,11 +164,6 @@ function commitJobs()
       function(response) {    
         //no-op, probably
       }, 'json');   
-      
-      var delay = 5 * 60 * 1000; //5 mins
-      var newDateObj = new Date();
-      newDateObj.setTime(currDate.getTime() + delay);
-      currDate = newDateObj;
     }
   });
   
@@ -217,6 +197,16 @@ $("#jobsDatesButton").click(function () {
   setupJobsPane();
 });
 
+function getJobQueueTime(startIndex) 
+{
+  for (var i = startIndex - 1; i >= 0; i--)
+  {
+    var li = $("#jobQueued li").eq(i);
+    var time = li.attr("jobTime");
+    time = parseInt(time) + parseInt(timeDelay/1000);
+    return time;
+  }
+}
 
 function setupJobsPane()
 {
@@ -243,8 +233,18 @@ function setupJobsPane()
   
   $( "#jobCandidates, #jobQueued" ).sortable({
     connectWith: ".connectedSortable",
-    cancel: ".fixed"                                  
+    cancel: ".fixed"
   }).disableSelection();
+
+  $('#jobQueued').droppable({
+    drop: function (ev, ui) {
+      // get index of empty spot to drag into
+      var i = $("#jobQueued .ui-sortable-placeholder").index();
+      var time = getJobQueueTime(i);
+      var droppedElem = $(ui.draggable);
+      droppedElem.attr("jobTime", time);
+    }
+  });
   
 }
 
