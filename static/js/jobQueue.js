@@ -162,6 +162,7 @@ function commitJobs()
       submitDict["jobTime"] = timeStamp;
       
       $.ajax({
+        type: 'POST',
         url: "../image",
         dataType: 'json',
         async: false,
@@ -169,13 +170,7 @@ function commitJobs()
         success: function(json) {
           return true
         }
-      });
-        
-/*      $.post('../image', 
-      submitDict, 
-      function(response) {    
-        //no-op, probably
-      }, 'json');*/   
+      }); 
     }
   });
   
@@ -192,6 +187,7 @@ function commitJobs()
     if (candidate == "false")
     {
       $.ajax({
+        type: 'POST',
         url: "../image",
         dataType: 'json',
         async: false,
@@ -200,11 +196,6 @@ function commitJobs()
           return true
         }
       });
-/*      $.post('../image', 
-      submitDict, 
-      function(response) {    
-        //no-op, probably
-      }, 'json');*/  
     }
   });
 }
