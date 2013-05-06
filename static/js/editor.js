@@ -823,10 +823,10 @@ $("#geoCode").click(function() {
 $("#flickrSets").tagit({
   placeholderText: "add flickr sets...",
   afterTagAdded: function(event, ui) {
-    $("#editorSlide").data('flickrSetsDirty', false);
+    $("#editorSlide").data('flickrSetsDirty', true);
   },
   afterTagRemoved: function(event, ui) {
-    $("#editorSlide").data('flickrSetsDirty', false);
+    $("#editorSlide").data('flickrSetsDirty', true);
   },
   beforeTagAdded: function(event, ui) {
     var tagLabel = $("#flickrSets").tagit('tagLabel', ui.tag)
@@ -839,10 +839,10 @@ $("#flickrSets").tagit({
 $("#flickrGroups").tagit({
   placeholderText: "add flickr sets...",
   afterTagAdded: function(event, ui) {
-    $("#editorSlide").data('flickrGroupsDirty', false);
+    $("#editorSlide").data('flickrGroupsDirty', true);
   },
   afterTagRemoved: function(event, ui) {
-    $("#editorSlide").data('flickrGroupsDirty', false);
+    $("#editorSlide").data('flickrGroupsDirty', true);
   },
   beforeTagAdded: function(event, ui) {
     var tagLabel = $("#flickrGroups").tagit('tagLabel', ui.tag)
