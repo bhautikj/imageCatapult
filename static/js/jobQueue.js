@@ -228,7 +228,7 @@ function setupJobsPane()
   listitems.sort(function(a, b) {
     var aAttr = $(a).attr("jobTime");
     var bAttr = $(b).attr("jobTime"); 
-    return parseInt(aAttr)>parseInt(bAttr);
+    return (parseInt(aAttr)>parseInt(bAttr)) ? 1 : -1;
   });
   $.each(listitems, function(idx, itm) { jobQueuedList.append(itm); });
 
@@ -237,7 +237,7 @@ function setupJobsPane()
   listitems.sort(function(a, b) {
     var aAttr = $(a).attr("unixTime");
     var bAttr = $(b).attr("unixTime"); 
-    return parseInt(aAttr)<parseInt(bAttr);
+    return (parseInt(aAttr)<parseInt(bAttr)) ? 1 : -1;
   });
   $.each(listitems, function(idx, itm) { jobCandidatesList.append(itm); });
   
