@@ -1,3 +1,15 @@
 [submodule "static/jQuery-File-Upload"]
 	path = static/jQuery-File-Upload
 	url = https://github.com/blueimp/jQuery-File-Upload
+[submodule "static/jquery-dropdown"]
+	path = static/jquery-dropdown
+	url = https://github.com/claviska/jquery-dropdown
+[submodule "static/tag-it"]
+	path = static/tag-it
+	url = https://github.com/aehlke/tag-it
+[submodule "static/jquery-ui-touch-punch"]
+	path = static/jquery-ui-touch-punch
+	url = https://github.com/furf/jquery-ui-touch-punch
+[submodule "static/jquery-addresspicker"]
+	path = static/jquery-addresspicker
+	url = https://github.com/sgruhier/jquery-addresspicker
