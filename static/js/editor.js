@@ -1,16 +1,9 @@
 jQuery.ajaxSettings.traditional = true;
 
 $(function() {
-  $( "#flickrSets" ).selectable({
-    unselected: function(event, ui) { $("#editorSlide").data('flickrSetsDirty', true); },
-    selected: function(event, ui) { $("#editorSlide").data('flickrSetsDirty', true); }                          
-  });
-  $( "#flickrGroups" ).selectable({
-    unselected: function(event, ui) { $("#editorSlide").data('flickrGroupsDirty', true); },
-    selected: function(event, ui) { $("#editorSlide").data('flickrGroupsDirty', true); }                          
-  });
+  $("#flickrSets").tagit();
+  $("#flickrGroups").tagit();
   
-
   $("#latitude").filter_input({regex:'[0-9.]'}); 
   $("#longitude").filter_input({regex:'[0-9.]'}); 
 
@@ -24,6 +17,15 @@ $(function() {
 
   setInterval( "slideSwitch()", 8000 );
 });
+
+function reverseDictLookup(dict, value)
+{
+  for (var key in dict)
+  {
+    if (dict[key] == value)
+      return key;
+  }
+}
 
 function showUploadImages()
 {
@@ -163,8 +165,8 @@ $( "#editButton" ).click(function() {
     return;
 
   $("#editorSlide").html("");
-  $("#flickrSets").html("");
-  $("#flickrGroups").html("");
+  $("#flickrSets").tagit("removeAll");
+  $("#flickrGroups").tagit("removeAll");
   $("#editTags").tagit("removeAll");
   
   var winWidth =  $(window).width();
@@ -232,6 +234,10 @@ $( "#editButton" ).click(function() {
   
   if (authDict["flickr"] == true)
   {
+
+    var flickrSetsList = [];
+    var flickrSetsDict = {};
+    
     $.ajax({
       url: "../flickr",
       async: false,
@@ -240,15 +246,21 @@ $( "#editButton" ).click(function() {
       success: function (response) {
         for (var key in response)
         {
-          var li = $('<li>');
-          li.attr('class','ui-widget-content')
-          li.attr('value',key);
-          li.text(response[key]);
-          $('#flickrSets').append(li);
+          flickrSetsList.push(response[key]);
+          flickrSetsDict[key] = response[key];
         }
-        sortList($("#flickrSets"));
       }
     });
+
+    $("#editorSlide").data('flickrSetsList', flickrSetsList);
+    $("#editorSlide").data('flickrSetsDict', flickrSetsDict);
+    
+    $("#flickrSets").tagit({
+      availableTags : $("#editorSlide").data('flickrSetsList')
+    });
+ 
+    var flickrGroupsList = [];
+    var flickrGroupsDict = {};
     
     $.ajax({
       url: "../flickr",
@@ -258,14 +270,17 @@ $( "#editButton" ).click(function() {
       success: function (response) {
         for (var key in response)
         {
-          var li = $('<li>');
-          li.attr('class','ui-widget-content')
-          li.attr('value',key);
-          li.text(response[key]);
-          $('#flickrGroups').append(li);
+          flickrGroupsList.push(response[key]);
+          flickrGroupsDict[key] = response[key];
         }
-        sortList($("#flickrGroups"));
       }
+    });
+    
+    $("#editorSlide").data('flickrGroupsList', flickrGroupsList);
+    $("#editorSlide").data('flickrGroupsDict', flickrGroupsDict);
+    
+    $("#flickrGroups").tagit({
+      availableTags : $("#editorSlide").data('flickrGroupsList')
     });
   }
   
@@ -356,6 +371,7 @@ $( "#editButton" ).click(function() {
   $("#editorSlide").data('otherOptsDirty', false);
   $("#editorSlide").data('geoCodeDirty', false);
   
+  $("#templateShow").show();
   $(".templateEdit").hide();
   $("#editBox").data("selectedImages", selectedImages);
   
@@ -606,41 +622,43 @@ function updateTemplateList()
 
 function setSelectedFlickrSets(flickrSets)
 {
+  var flickrSetsDict = $("#editorSlide").data("flickrSetsDict");
   for (var i = 0; i < flickrSets.length; i++) 
   {
-    var element = $("#flickrSets [value='" + flickrSets[i] + "']")
-    element.addClass("ui-selected");     
+    $("#flickrSets").tagit("createTag", flickrSetsDict[flickrSets[i]]);
   }
-  //$("#flickrSets").data("selectable")._mouseStop(null);
 }
 
 function setSelectedFlickrGroups(flickrGroups)
 {
+  var flickrGroupsDict = $("#editorSlide").data("flickrGroupsDict");
   for (var i = 0; i < flickrGroups.length; i++) 
   {
-    var element = $("#flickrGroups [value='" + flickrGroups[i] + "']")
-    element.addClass("ui-selected");     
+    $("#flickrGroups").tagit("createTag", flickrGroupsDict[flickrGroups[i]]);
   }
-  //$("#flickrGroups").data("selectable")._mouseStop(null);
 }
 
 function getSelectedFlickrSets()
 {
   var flickrSets = [];
-  $("#flickrSets .ui-selected").each(function(){
-    var setid =  $(this).attr("value");
-    flickrSets.push(setid);
-  });
+  var flickrSetsRaw = $("#flickrSets").tagit("assignedTags");
+  var flickrSetsDict = $("#editorSlide").data("flickrSetsDict");
+  for (var i = 0; i< flickrSetsRaw.length; i++)
+  {
+    flickrSets.push(reverseDictLookup(flickrSetsDict, flickrSetsRaw[i]));
+  }  
   return flickrSets;
 }
 
 function getSelectedFlickrGroups()
 {
   var flickrGroups = [];
-  $("#flickrGroups .ui-selected").each(function(){
-    var setid =  $(this).attr("value");
-    flickrGroups.push(setid);
-  });
+  var flickrGroupsRaw = $("#flickrGroups").tagit("assignedTags");
+  var flickrGroupsDict = $("#editorSlide").data("flickrGroupsDict");
+  for (var i = 0; i< flickrGroupsRaw.length; i++)
+  {
+    flickrGroups.push(reverseDictLookup(flickrGroupsDict, flickrGroupsRaw[i]));
+  }  
   return flickrGroups;
 }
 
@@ -802,36 +820,67 @@ $("#geoCode").click(function() {
     geoCodeSetEnabled(false);
 });
 
+$("#flickrSets").tagit({
+  placeholderText: "add flickr sets...",
+  afterTagAdded: function(event, ui) {
+    $("#editorSlide").data('flickrSetsDirty', false);
+  },
+  afterTagRemoved: function(event, ui) {
+    $("#editorSlide").data('flickrSetsDirty', false);
+  },
+  beforeTagAdded: function(event, ui) {
+    var tagLabel = $("#flickrSets").tagit('tagLabel', ui.tag)
+    var tagList = $("#editorSlide").data('flickrSetsList');
+    if (tagList.indexOf(tagLabel) < 0)
+      return false;
+  }
+});
+
+$("#flickrGroups").tagit({
+  placeholderText: "add flickr sets...",
+  afterTagAdded: function(event, ui) {
+    $("#editorSlide").data('flickrGroupsDirty', false);
+  },
+  afterTagRemoved: function(event, ui) {
+    $("#editorSlide").data('flickrGroupsDirty', false);
+  },
+  beforeTagAdded: function(event, ui) {
+    var tagLabel = $("#flickrGroups").tagit('tagLabel', ui.tag)
+    var tagList = $("#editorSlide").data('flickrGroupsList');
+    if (tagList.indexOf(tagLabel) < 0)
+      return false;
+  }
+});
 
 $("#editTags").tagit({
-autocomplete: { source: function( request, response ) {
-  $.ajax({
-    url: "../tags",
-    dataType: "json",
-    data: {
-      searchTags: request.term
-    },
-    success: function( data ) {
-    response( $.map( data.results, function( item ) {
-      return {
-        label: item,
-        value: item
+  autocomplete: { source: function( request, response ) {
+    $.ajax({
+      url: "../tags",
+      dataType: "json",
+      data: {
+        searchTags: request.term
+      },
+      success: function( data ) {
+      response( $.map( data.results, function( item ) {
+        return {
+          label: item,
+          value: item
+        }
+        }));
       }
-      }));
-    }
-  });
+    });
+    },
+      minLength: 2 
   },
-    minLength: 2 
+  placeholderText: "add tags...",
+  afterTagAdded: function(event, ui) {
+      //console.log(ui.tag);
+    $("#editorSlide").data('tagsDirty', true);
   },
-placeholderText: "add tags...",
-afterTagAdded: function(event, ui) {
-    //console.log(ui.tag);
-  $("#editorSlide").data('tagsDirty', true);
-},
-afterTagRemoved: function(event, ui) {
-    //console.log(ui.tag);
-  $("#editorSlide").data('tagsDirty', true);
-}
+  afterTagRemoved: function(event, ui) {
+      //console.log(ui.tag);
+    $("#editorSlide").data('tagsDirty', true);
+  }
 
 });
 
