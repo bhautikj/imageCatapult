@@ -46,6 +46,12 @@ function timestampToDate(stamp)
   return date.toLocaleString("en-GB");
 }
 
+// #0:dbid
+// #1:src
+// #2:status
+// #3:jobtime
+// #4:unixtime
+
 function createImageListElement(data)
 {
   var li = $('<li>');

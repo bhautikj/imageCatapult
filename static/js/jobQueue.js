@@ -75,8 +75,9 @@ function populatePanes()
     success: function(json) {
       $.each(json, function (e, y) {
         var li = createImageListElement(y);
-        li.attr("jobTime",y[2]);
-        li.attr("unixTime",y[3]);
+        //#0:image ID, 1:image URL, 2:status, 3:jobtime, 4:unixtime
+        li.attr("jobTime",y[3]);
+        li.attr("unixTime",y[4]);
         li.attr("candidate",true);
         $( "#jobCandidates").append(li);
       });
@@ -94,8 +95,9 @@ function populatePanes()
     success: function(json) {
       $.each(json, function (e, y) {
         var li = createImageListElement(y);
-        li.attr("jobTime",y[2]);
-        li.attr("unixTime",y[3]);
+        //#0:image ID, 1:image URL, 2:status, 3:jobtime, 4:unixtime
+        li.attr("jobTime",y[3]);
+        li.attr("unixTime",y[4]);
         li.attr("candidate",false);
         $( "#jobQueued").append(li);
       });
@@ -243,9 +245,35 @@ function setupJobsPane()
       var time = getJobQueueTime(i);
       var droppedElem = $(ui.draggable);
       droppedElem.attr("jobTime", time);
+      
+      //add or update queued corner tag
+      if (droppedElem.hasClass('queued'))
+      {
+        droppedElem.find(".jobTimeStamp").text(timestampToDate(time));
+      }
+      else
+      {
+        var queuedTag = $('<div>');
+        queuedTag.addClass('queuedTag');
+        queuedTag.appendTo(droppedElem);
+        var jobTime = $('<span>');
+        jobTime.addClass('jobTimeStamp');
+        jobTime.text(timestampToDate(time));
+        jobTime.appendTo(droppedElem);
+      }
+      
+      droppedElem.addClass('queued');
     }
   });
   
+  $('#jobCandidates').droppable({
+    drop: function (ev, ui) {
+      var droppedElem = $(ui.draggable);
+      droppedElem.children('.queuedTag').remove();
+      droppedElem.children('.jobTimeStamp').remove();
+      droppedElem.removeClass('queued');
+    }
+  });
 }
 
 $( "#jobListDateRangeShow" ).click(function() {

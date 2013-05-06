@@ -30,8 +30,8 @@ class ImagedbInteraface:
         return json.dumps(ret)
       
       for i in dbList:
-        #image ID, image URL, status, jobtime
-        entry = (int(i[0]), "../imagestore/" + str(i[1]), str(i[2]), str(i[3])) 
+        #image ID, image URL, status, jobtime, unixtime
+        entry = (int(i[0]), "../imagestore/" + str(i[1]), str(i[2]), str(i[3]), str(i[4])) 
         ret.append(entry)
       return json.dumps(ret)
     elif "jobList" in params.keys():
@@ -48,10 +48,9 @@ class ImagedbInteraface:
         return json.dumps(ret)
       
       for i in dbList:
-        time = 0
-        if i[2] != None:
-          time = int(i[2])
-        ret.append((int(i[0]), "../imagestore/" + str(i[1]), int(time)))
+        #image ID, image URL, status, jobtime, unixtime
+        entry = (int(i[0]), "../imagestore/" + str(i[1]), str(i[2]), str(i[3]), str(i[4])) 
+        ret.append(entry)
       return json.dumps(ret)
     elif "getImageDateRange" in params.keys():
       minDate = imagedb.getMinImageDate()

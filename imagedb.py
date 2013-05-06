@@ -382,7 +382,7 @@ class ImageDb:
     self.db.commit()
 
   def listAllImages(self, minDate=None, maxDate=None):
-    query = "SELECT imageId, dburl, status, jobTime FROM image NATURAL JOIN job WHERE job.status <> 'done' "
+    query = "SELECT imageId, dburl, status, jobTime, unixTime FROM image NATURAL JOIN job WHERE job.status <> 'done' "
     if minDate != None:
       query += ' WHERE unixTime > ' + str(minDate)
     if minDate != None and maxDate != None:
@@ -433,7 +433,7 @@ class ImageDb:
     self.db.commit()
 
   def listAllJobs(self, status, minDate=None, maxDate=None):
-    query = "SELECT imageId, dburl, jobTime, unixTime FROM image NATURAL JOIN job WHERE image.imageId = job.imageId AND status = :status"
+    query = "SELECT imageId, dburl, status, jobTime, unixTime FROM image NATURAL JOIN job WHERE image.imageId = job.imageId AND status = :status"
     if minDate != None and maxDate != None:
       query += ' AND jobTime > ' + str(minDate) + ' AND jobTime < ' + str(maxDate)
  
