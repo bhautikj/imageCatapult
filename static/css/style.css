@@ -147,14 +147,6 @@ select{
   width: 700px;
 }
 
-#editBox #templateOpts
-{
-/*  border-style:solid;
-  border-width:1px;*/
-  padding: 5px;
-/*   opacity: 0.4; */
-}
-
 #editBox #standardOpts
 {
   padding: 5px;
@@ -168,6 +160,12 @@ select{
 }
 
 #editBox #flickrOpts
+{
+  padding: 5px;
+  width: 100%;
+}
+
+#editBox #templateOpts
 {
   padding: 5px;
   width: 100%;

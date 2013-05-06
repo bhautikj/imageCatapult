@@ -357,7 +357,6 @@ $( "#editButton" ).click(function() {
   $("#editorSlide").data('geoCodeDirty', false);
   
   $(".templateEdit").hide();
-  $("#toggleTemplatesButton").data("shown",false);  
   $("#editBox").data("selectedImages", selectedImages);
   
   $("#standardOptsShow").hide();
@@ -416,28 +415,25 @@ $("#geoCodeOptsHide").click(function () {
   $("#geoCodeOptsShow").show("fast");
 });
 
-$( "#toggleTemplatesButton" ).click(function() {
-  var shown = $("#toggleTemplatesButton").data("shown");
-  if (shown == true)
-  {
-    $(".templateEdit").hide("slow");
-    $("#toggleTemplatesButton").data("shown",false);
-  }
-  else
-  {
-    $(".templateEdit").show("slow");
-    $("#toggleTemplatesButton").data("shown",true);
-    $("#titleCheck").attr('checked', false);
-    $("#descriptionCheck").attr('checked', false);
-    $("#tagsCheck").attr('checked', false);
-    $("#flickrSetsCheck").attr('checked', false);
-    $("#flickrGroupsCheck").attr('checked', false); 
-    $("#otherOptsCheck").attr('checked', false);
-    $("#geoCodeCheck").attr('checked', false);
-    $("#saveTemplateName").val("");
-    
-    updateTemplateList();
-  }
+$( "#templateShow" ).click(function() {
+  $("#templateShow").hide("fast");
+  
+  $(".templateEdit").show("fast");
+  $("#titleCheck").attr('checked', false);
+  $("#descriptionCheck").attr('checked', false);
+  $("#tagsCheck").attr('checked', false);
+  $("#flickrSetsCheck").attr('checked', false);
+  $("#flickrGroupsCheck").attr('checked', false); 
+  $("#otherOptsCheck").attr('checked', false);
+  $("#geoCodeCheck").attr('checked', false);
+  $("#saveTemplateName").val("");
+  
+  updateTemplateList();
+});
+
+$( "#templateHide").click(function () {
+  $(".templateEdit").hide("fast");
+  $("#templateShow").show("fast");
 });
 
 $("#submitLoadTemplate").click(function() {
