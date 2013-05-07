@@ -125,6 +125,7 @@ function setupCalendar()
     
     var li = $('<li>');
     li.attr("class","fixed dateHeader");
+    li.attr("style", "width:100px");
     li.attr("hour", hour);
     li.attr("minute", minute);
     li.attr("day", day);
