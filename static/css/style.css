@@ -254,4 +254,17 @@ select{
   -webkit-box-shadow: #AAA 0px 0px 15px;
 }
 
+.authStatus
+{
+  width:200px;
+}
 
+.authFalse
+{
+  background: #AA2222;
+}
+
+.authTrue
+{
+  background: #22AA22;
+}

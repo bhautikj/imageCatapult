@@ -3,6 +3,8 @@ import authPickler
 from apiToolsBase import OAuthObjectBase
 from apiToolsBase import redirectToUrlText
 
+import json
+
 import web
 from web import form
 
@@ -20,7 +22,7 @@ class TumblrObject(OAuthObjectBase):
 
     auth_url = self.tumblr_oauth.get_authorize_url()
 
-    return redirectToUrlText(auth_url)
+    return auth_url
 
   def authPart2(self, oauth_verifier):
     access_token = self.tumblr_oauth.get_access_token(oauth_verifier)
@@ -39,7 +41,7 @@ class TumblrObject(OAuthObjectBase):
 
     self.setupAPI()
 
-    return redirectToUrlText(web.ctx.homedomain + "/auth")
+    return redirectToUrlText(web.ctx.homedomain)
 
   def setupAPI(self):
     hostname = self.publishURL
@@ -74,11 +76,6 @@ urls = (
 "", "TumblrAuth",
 )
 
-appForm = form.Form(
-  form.Textbox('Tumblr blog URL', form.notnull),
-  form.Textbox('Tumblr API Key', form.notnull),
-  form.Password('Tumblr API Secret', form.notnull),
-)
 
 render = web.template.render('templates/')
 
@@ -89,27 +86,22 @@ class TumblrAuth:
   def GET(self, path=None):
     global tumblrObject
 
-    if not tumblrObject.hasApp:
-      form = appForm()
-      return render.getTumblrApp(form)
-
     if not tumblrObject.authorised:
       params  = web.input()
       if 'oauth_verifier' in params.keys():
         return tumblrObject.authPart2(params['oauth_verifier'])
-      else:
-        return tumblrObject.authPart1()
-    else:
-      return "Error: Tumblr already authorised!"
 
   def POST(self):
-    form = appForm()
-    if not form.validates():
-      return render.getTumblrApp(form)
-    else:
-      if not tumblrObject.setupApp(form['Tumblr API Key'].value, form['Tumblr API Secret'].value, form['Tumblr blog URL'].value):
-        return render.getTumblrApp(form)
-      else:
-        return redirectToUrlText(web.ctx.homedomain + "/tumblrAuth?")
-    
+    params = web.input()
+    global tumblrObject
+    if "submitInitial" in params.keys():
+      apiKey = params["apiKey"]
+      apiSecret = params["apiSecret"]
+      blogURL = params["blogURL"]
+      
+      tumblrObject.setupApp(apiKey, apiSecret, blogURL)
+      redirectURL =  tumblrObject.authPart1()
+
+      return json.dumps({'redirectURL':redirectURL})
+        
 tumblrApp = web.application(urls, locals())

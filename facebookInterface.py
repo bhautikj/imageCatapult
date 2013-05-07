@@ -5,6 +5,7 @@ from apiToolsBase import redirectToUrlText
 
 import urllib2
 import urlparse
+import json
 
 import web
 from web import form
@@ -18,12 +19,12 @@ class FacebookObject(OAuthObjectBase):
 
   def authPart1(self):
     auth_url = 'https://www.facebook.com/dialog/oauth?client_id=' + self.api_key + \
-               '&redirect_uri=' + web.ctx.homedomain + '/facebookAuth&scope=offline_access,publish_stream'
-    return redirectToUrlText(auth_url)
+               '&redirect_uri=' + web.ctx.homedomain + '/auth/facebookAuth&scope=offline_access,publish_stream'
+    return auth_url
 
   def authPart2(self, code):
     access_token_url = 'https://graph.facebook.com/oauth/access_token?client_id=' + self.api_key + \
-                       '&redirect_uri=' + web.ctx.homedomain + '/facebookAuth' + \
+                       '&redirect_uri=' + web.ctx.homedomain + '/auth/facebookAuth' + \
                        '&client_secret=' + self.api_secret + '&code=' + code
 
     pageGet = urllib2.urlopen(access_token_url).read()
@@ -35,7 +36,7 @@ class FacebookObject(OAuthObjectBase):
 
     self.setupAPI()
     
-    return redirectToUrlText(web.ctx.homedomain + "/auth")
+    return redirectToUrlText(web.ctx.homedomain)
 
   def setupAPI(self):
     self.facebookGraph = facebook.GraphAPI(self.final_oauth_token)
@@ -58,11 +59,6 @@ urls = (
 "", "FacebookAuth",
 )
 
-appForm = form.Form(
-  form.Textbox('Facebook API Key', form.notnull),
-  form.Password('Facebook API Secret', form.notnull),
-)
-
 render = web.template.render('templates/')
 
 facebookObject = FacebookObject()
@@ -72,27 +68,22 @@ class FacebookAuth:
   def GET(self, path=None):
     global facebookObject
 
-    if not facebookObject.hasApp:
-      form = appForm()
-      return render.getFacebookApp(form)
-
     if not facebookObject.authorised:
       params  = web.input()
       if 'code' in params.keys():
         return facebookObject.authPart2(params['code'])
-      else:
-        return facebookObject.authPart1()
-    else:
-      return "Error: Facebook already authorised!"
 
   def POST(self):
-    form = appForm()
-    if not form.validates():
-      return render.getFacebookApp(form)
-    else:
-      if not facebookObject.setupApp(form['Facebook API Key'].value, form['Facebook API Secret'].value):
-        return render.getFacebookApp(form)
-      else:
-        return redirectToUrlText(web.ctx.homedomain + "/facebookAuth?")
+    params = web.input()
+    global facebookObject
+    if "submitInitial" in params.keys():
+      apiKey = params["apiKey"]
+      apiSecret = params["apiSecret"]
+      
+      facebookObject.setupApp(apiKey, apiSecret)
+      redirectURL =  facebookObject.authPart1()
+
+      return json.dumps({'redirectURL':redirectURL})
+
 
 facebookApp = web.application(urls, locals())

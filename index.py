@@ -22,7 +22,8 @@ urls = (
   '/tags', tagsApp,
   '/template', templateApp,
   '/flickr', flickrApp,
-  '/spew', wordspewApp
+  '/spew', wordspewApp,
+  '/', 'index'
 )
 
 render = web.template.render('templates/')
@@ -33,6 +34,11 @@ class Index:
 
 app = web.application(urls, locals())
 
+class index:
+  def GET(self):
+    # redirect to the static file ...
+    raise web.seeother('/static/index.html')
+      
 class RoutingApp(web.httpserver.StaticApp):
   def __init__(self, environ, start_response, prefixDict):
     web.httpserver.StaticApp.__init__(self, environ, start_response)

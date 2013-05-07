@@ -5,6 +5,8 @@ import authPickler
 from apiToolsBase import OAuthObjectBase
 from apiToolsBase import redirectToUrlText
 
+import json
+
 import web
 from web import form
 
@@ -35,8 +37,7 @@ class TwitterObject(OAuthObjectBase):
     self.oauth_token = request_token['oauth_token']
     self.oauth_token_secret = request_token['oauth_token_secret']
     
-    print "redirecting to:" + str(auth_url)
-    return redirectToUrlText(auth_url)
+    return auth_url
 
   def authPart2(self, oauth_token, oauth_verifier):
     token = oauth.Token(self.oauth_token, self.oauth_token_secret)
@@ -59,7 +60,7 @@ class TwitterObject(OAuthObjectBase):
 
     self.setupAPI()
 
-    return redirectToUrlText(web.ctx.homedomain + "/auth")
+    return redirectToUrlText(web.ctx.homedomain)
 
   def setupAPI(self):
     self.twitter = twitter.Api(consumer_key=self.api_key,
@@ -91,27 +92,22 @@ class TwitterAuth:
   def GET(self, path=None):
     global twitterObject
 
-    if not twitterObject.hasApp:
-      form = appForm()
-      return render.getTwitterApp(form)
-
     if not twitterObject.authorised:
       params  = web.input()
       if 'oauth_token' in params.keys() and 'oauth_verifier' in params.keys():
         return twitterObject.authPart2(params['oauth_token'], params['oauth_verifier'])
-      else:
-        return twitterObject.authPart1()
-    else:
-      return "Error: Twitter already authorised!"
 
   def POST(self):
-    form = appForm()
-    if not form.validates():
-      return render.getTwitterApp(form)
-    else:
-      if not twitterObject.setupApp(form['Twitter API Key'].value, form['Twitter API Secret'].value):
-        return render.getTwitterApp(form)
-      else:
-        return redirectToUrlText(web.ctx.homedomain + "/twitterAuth?")
+    params = web.input()
+    global twitterObject
+    if "submitInitial" in params.keys():
+      apiKey = params["apiKey"]
+      apiSecret = params["apiSecret"]
+      
+      twitterObject.setupApp(apiKey, apiSecret)
+      redirectURL =  twitterObject.authPart1()
+
+      return json.dumps({'redirectURL':redirectURL})
+
     
 twitterApp = web.application(urls, locals())

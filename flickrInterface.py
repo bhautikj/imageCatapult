@@ -19,7 +19,7 @@ class FlickrObject(OAuthObjectBase):
   def authPart1(self):
     f = FlickrAPI(api_key=self.api_key,
             api_secret=self.api_secret,
-            callback_url= web.ctx.homedomain + '/flickrAuth?')
+            callback_url= web.ctx.homedomain + '/auth/flickrAuth?')
 
     auth_props = f.get_authentication_tokens(perms='write')
     auth_url = auth_props['auth_url']
@@ -28,7 +28,7 @@ class FlickrObject(OAuthObjectBase):
     self.oauth_token = auth_props['oauth_token']
     self.oauth_token_secret = auth_props['oauth_token_secret']
 
-    return redirectToUrlText(auth_url)
+    return auth_url
 
   def authPart2(self, oauth_token, oauth_verifier):
     f = FlickrAPI(api_key=self.api_key,
@@ -49,7 +49,7 @@ class FlickrObject(OAuthObjectBase):
 
     self.setupAPI()
 
-    return redirectToUrlText(web.ctx.homedomain + "/auth")
+    return redirectToUrlText(web.ctx.homedomain)
 
   def setupAPI(self):
     self.flickrAPI = FlickrAPI(api_key=self.api_key,
@@ -187,39 +187,29 @@ authUrls = (
 "", "FlickrAuth",
 )
 
-appForm = form.Form(    
-  form.Textbox('Flickr API Key', form.notnull),
-  form.Password('Flickr API Secret', form.notnull),
-)
-
 render = web.template.render('templates/')
 
 class FlickrAuth:
   def GET(self, path=None):
     global flickrObject
 
-    if not flickrObject.hasApp:
-      form = appForm()
-      return render.getFlickrApp(form)
-
     if not flickrObject.authorised:
       params  = web.input()
       if 'oauth_token' in params.keys() and 'oauth_verifier' in params.keys():
         return flickrObject.authPart2(params['oauth_token'], params['oauth_verifier'])
-      else:
-        return flickrObject.authPart1()
-    else:
-      return "Error: Flickr already authorised!"
 
   def POST(self):
-    form = appForm()
-    if not form.validates():
-      return render.getFlickrApp(form)
-    else:
-      if not flickrObject.setupApp(form['Flickr API Key'].value, form['Flickr API Secret'].value):
-        return render.getFlickrApp(form)
-      else:
-        return redirectToUrlText(web.ctx.homedomain + "/flickrAuth?")
+    params = web.input()
+    global flickrObject
+    if "submitInitial" in params.keys():
+      apiKey = params["apiKey"]
+      apiSecret = params["apiSecret"]
+      
+      flickrObject.setupApp(apiKey, apiSecret)
+      redirectURL =  flickrObject.authPart1()
+
+      return json.dumps({'redirectURL':redirectURL})
+ 
 
 flickrAuthApp = web.application(authUrls, locals())
 

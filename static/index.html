@@ -131,12 +131,56 @@
 </div>
 
 <div id="authPage">
-  <a href="../auth">Edit Authorisation</a><br/><br/>
-  <strong>Status:</strong><br/><br/>
-  Flickr <div id="flickrAuthStatus">unauthorised</div><br/>
-  Facebook <div id="facebookAuthStatus">unauthorised</div><br/>
-  Tumblr <div id="tumblrAuthStatus">unauthorised</div><br/>
-  Twitter <div id="twitterAuthStatus">unauthorised</div><br/>
+  <span class="authStatus" id="flickrStatus">Flickr</span>
+  <span id="flickrAppInput">
+    <br/>
+    <label for="flickrAPIKey">Flickr API Key</label>
+    <input type="text" id="flickrAPIKey" name="flickrAPIKey" />
+    <label for="flickrAPISecret">Flickr API Secret</label>
+    <input type="text" id="flickrAPISecret" name="flickrAPISecret" />
+    <button id="flickrAppInputSubmit">Submit</button>
+    <br/>
+    <strong>Flickr:</strong> go <a href="http://www.flickr.com/services/apps/create/apply/" target="_blank">here</a> to create a new flickr app. Select 'apply for a non-commercial key'. Name your app and describe it, hit submit and use the API key and API secret in the entry field above. <br/><br/>
+  </span><br/>
+
+  <span class="authStatus" id="facebookStatus">Facebook</span>
+  <span id="facebookAppInput">
+    <br/>
+    <label for="facebookAPIKey">Facebook API Key</label>
+    <input type="text" id="facebookAPIKey" name="facebookAPIKey" />
+    <label for="facebookAPISecret">Facebook API Secret</label>
+    <input type="text" id="facebookAPISecret" name="facebookAPISecret" />
+    <button id="facebookAppInputSubmit">Submit</button>
+    <br/>
+    <strong>Facebook:</strong> go <a href="https://developers.facebook.com/apps" target="_blank">here</a> to create a new facebook app. Hit the 'create new app' button; name the app and hit 'continue'. Under 'select how your app integrates with facebook' set the site URL to the base URL for pyButler (so something like http://localhost:8080). Note the app ID and secret and use them in the entry field above.<br/><br/>
+  </span><br/>  
+
+  <span class="authStatus" id="tumblrStatus">Tumblr</span>
+  <span id="tumblrAppInput">
+    <br/>
+    <label for="tumblrAPIKey">Tumblr API Key</label>
+    <input type="text" id="tumblrAPIKey" name="tumblrAPIKey" />
+    <label for="tumblrAPISecret">Tumblr API Secret</label>
+    <input type="text" id="tumblrAPISecret" name="tumblrAPISecret" />
+    <label for="tumblrBlogURL">Tumblr Blog URL</label>
+    <input type="text" id="tumblrBlogURL" name="tumblrBlogURL" />
+    <button id="tumblrAppInputSubmit">Submit</button>
+    <br/>
+    <strong>Tumblr:</strong> go to <a href="http://www.tumblr.com/oauth/apps" target="_blank">here</a> to register a new tumblr app. Give the app a name, and under 'default callback url' give it the base URL for pyButler and add '/auth/tumblrAuth' to the end, so something like: http://localhost:8080/auth/tumblrAuth. Create the app, make a note of the OAuth consumer key and secret and use them in the entry field above.<br/><br/>
+  </span><br/>  
+
+  <span class="authStatus" id="twitterStatus">Twitter</span>
+  <span id="twitterAppInput">
+    <br/>
+    <label for="twitterAPIKey">Twitter API Key</label>
+    <input type="text" id="twitterAPIKey" name="twitterAPIKey" />
+    <label for="twitterAPISecret">Twitter API Secret</label>
+    <input type="text" id="twitterAPISecret" name="twitterAPISecret" />
+    <button id="twitterAppInputSubmit">Submit</button>
+    <br/>
+    <strong>Twitter</strong> go to <a href="https://dev.twitter.com/apps" target="_blank">here</a> to create a new twitter app. Give the app a name and description and set the website and callback URL to the base URL for pyButer and add /auth/twitterAuth to the end, so something like: http://localhost:8080/auth/twitterAuth. Create the app, and make a note of the consumer key and secret and use them in the entry field above.<br/><br/>
+  </span><br/> 
+  
   <div class="jobBar ui-widget">
     <span class="left"><button class="inlineElem" id="authBackButton">Back</button></span>
     <span class="right"><a href="" title="pyButler written by Bhautik Joshi 2013"><strong style="color:yellow">py</strong><strong style="color:cyan">Butler</strong></a></span>
