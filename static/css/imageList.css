@@ -37,3 +37,17 @@
 {
 /*   background: #227; */
 }
+
+.arrow-right {
+  width:0px; 
+  height:0px; 
+  border-bottom:80px solid transparent;  /* left arrow slant */
+  border-top:80px solid transparent; /* right arrow slant */
+  border-left:80px solid #2f2f2f; /* bottom, add background color here */
+  font-size:0px;
+  line-height:0px;
+  float: right;
+  position:absolute;
+  top: 30px;
+  left: 0px;
+}

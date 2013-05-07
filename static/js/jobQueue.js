@@ -133,9 +133,11 @@ function setupCalendar()
     li.attr("year", year);
     var unixTime =  dayDate.getTime() / 1000.0;
     li.attr("jobTime", unixTime); 
+    var divarrow = $('<div>');
+    divarrow.addClass("arrow-right");
+    li.append(divarrow);
     li.append(displayId);
-    li.append('<br/>');
-    
+    li.append('<br/>');    
     $("#jobQueued").append(li);    
 
     fromDate.setDate(fromDate.getDate()+1);
