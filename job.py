@@ -16,8 +16,6 @@ import threading
 import datetime
 import time
 
-#TODO: temp!
-import newsHAL
 
 def postPendingJobs():
   jobIdList = map(lambda x: x[0], imagedb.getJobsToDo())
@@ -164,12 +162,6 @@ def postFlickrImage(jobDict):
   
   imagedb.updateFlickrPostUpload(jobDict["imageId"], photoid, url, shorturl, imagethumburl, imagelargeurl)
 
-def updateNewsHAL():
-  try:
-    newsHAL.feedHAL()
-  except:
-    print "COULD NOT UPDATE THE HAL!"
-    pass
 
 ## Run the job posting thread
 minuteSeconds = 60
@@ -181,7 +173,6 @@ class RunJobs(threading.Thread):
       now = datetime.datetime.now()
       print "Running pending jobs at time: %s" % (now)
       postPendingJobs()
-      #updateNewsHAL()
       time.sleep(interval*minuteSeconds)
 
 runJobsThread = RunJobs()

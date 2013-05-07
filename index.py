@@ -23,7 +23,6 @@ urls = (
   '/template', templateApp,
   '/flickr', flickrApp,
   '/spew', wordspewApp
-  #'/newsHAL', newsHALApp
 )
 
 render = web.template.render('templates/')
