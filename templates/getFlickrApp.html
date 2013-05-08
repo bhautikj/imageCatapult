@@ -1,8 +1,0 @@
-$def with (form)
-
-Please go <a href="http://www.flickr.com/services/apps/create/apply/">here</a> to obtain an API key. You probably want a non-commercial key. Once a key has been entered, you will be redirected to authorise the app with your flickr account.<br/><br/>
-
-<form name="main" method="post"> 
-$if not form.valid: <p class="error">Try again</p>
-$:form.render()
-<input type="submit" />    </form>
