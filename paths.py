@@ -31,7 +31,7 @@ def createDir(dirname):
     pass
   
 home = expanduser("~")
-appBase = os.path.join(home, ".pyButler")
+appBase = os.path.join(home, ".pixelWombat")
 #imageStore
 imageBase = os.path.join(appBase,"imagestore")
 
