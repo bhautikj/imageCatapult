@@ -1,22 +1,69 @@
 jQuery.ajaxSettings.traditional = true;
 
+// initial setup
 $(function() {
+  // turn the flickr sets/groups lists into tag lists
   $("#flickrSets").tagit();
   $("#flickrGroups").tagit();
   
+  // only allow numbers in the lat/long geo input boxes
   $("#latitude").filter_input({regex:'[0-9.]'}); 
   $("#longitude").filter_input({regex:'[0-9.]'}); 
 
+  // style the geo input geo fields
   $("#latitude").button().addClass('styledInput');
   $("#longitude").button().addClass('styledInput');
-
   $("#addresspicker_map").button().addClass('styledInput');
   
-  
+  // turn the template list into a selectable scroll box
   $("#templateList").selectable();
 
+  // turn on the slideshow for the editor page
   setInterval( "slideSwitch()", 8000 );
 });
+
+function animateImageScroll($image)
+{
+  $image.css("top",0)
+  .css("left",0);
+
+  var hofs;
+  if (hofs = $image.attr("targetHeightOffset"))
+  {
+    $image.animate({top: hofs}, 8000, function() {});
+  }
+  
+  var wofs;
+  if (wofs = $image.attr("targetWidthOffset"))
+  {
+    $image.animate({left: wofs}, 8000, function() {});
+  } 
+}
+
+// in the editor page, cycle background images
+function slideSwitch() {
+  var nimg =  $('#editorSlide IMG').length;
+
+  var $active = $('#editorSlide IMG.active');
+  
+  if ( $active.length == 0 ) $active = $('#editorSlide IMG:last'); 
+  
+  if (nimg < 2)
+    return;
+
+  var $next =  $active.next().length ? $active.next()
+  : $('#editorSlide IMG:first');
+
+  $active.addClass('last-active');
+
+  $next.css({opacity: 0.0})
+  .addClass('active')
+  .animate({opacity: 1.0}, 500, function() {
+      $active.removeClass('active last-active');
+  });
+
+  animateImageScroll($next);
+}
 
 function reverseDictLookup(dict, value)
 {
@@ -72,26 +119,7 @@ function showJobs()
   $("#authPage").hide("drop");
 }
 
-function slideSwitch() {
-  var nimg =  $('#editorSlide IMG').length;
-  if (nimg < 2)
-    return;
 
-  var $active = $('#editorSlide IMG.active');
-
-  if ( $active.length == 0 ) $active = $('#editorSlide IMG:last');
-
-  var $next =  $active.next().length ? $active.next()
-  : $('#editorSlide IMG:first');
-
-  $active.addClass('last-active');
-      
-  $next.css({opacity: 0.0})
-  .addClass('active')
-  .animate({opacity: 1.0}, 500, function() {
-      $active.removeClass('active last-active');
-  });
-}
 
 $("#uploadImagesButton").click(function () {
   showUploadImages();
@@ -300,11 +328,19 @@ $( "#editButton" ).click(function() {
         
         if(imgAr>windowAr)
         {
+          // image is wider than viewport
           img.attr('height', winHeight);
+          var scl = winHeight / image.height;          
+          var extraWidth = winWidth - scl * image.width;
+          img.attr('targetWidthOffset', extraWidth);
         }
         else
         {
+          // image is taller than viewport
           img.attr('width', winWidth);
+          var scl = winWidth / image.width;
+          var extraHeight =  winHeight - scl * image.height;
+          img.attr('targetHeightOffset', extraHeight);
         }
         $('#editorSlide').append(img);
       });
@@ -383,6 +419,9 @@ $( "#editButton" ).click(function() {
   $("#flickrOpts").hide();
   $("#geoCodeOptsShow").show();
   $("#geoCodeOpts").hide();
+  
+  // kick off image scrolling if needed
+  animateImageScroll($('#editorSlide IMG:last'));
   
   showEditor();
   setupMap();
