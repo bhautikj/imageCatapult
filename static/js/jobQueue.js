@@ -166,6 +166,30 @@ function setupCalendar()
   
 }
 
+function postQueuedJob(liElem)
+{
+  var dbid = liElem.find("img").attr("dbid");
+  var status = 'queued';
+  var timeStamp = liElem.attr("jobTime");
+  
+  submitDict = {}
+  submitDict["queueJob"] = 0;
+  submitDict["imageId"] = dbid;
+  submitDict["status"] = status;
+  submitDict["jobTime"] = timeStamp;
+  
+  $.ajax({
+    type: 'POST',
+    url: "../image",
+    dataType: 'json',
+    async: false,
+    data: submitDict,
+    success: function(json) {
+      return true
+    }
+  }); 
+}
+
 function commitJobs()
 {
   var nQueued = 0;
@@ -175,26 +199,7 @@ function commitJobs()
   $("#jobQueued li").each (function (index, li) {
     if ($(this).hasClass("fixed") == false)
     {
-      var dbid = jQuery(this).find("img").attr("dbid");
-      var status = 'queued';
-      var timeStamp = jQuery(this).attr("jobTime");
-      
-      submitDict = {}
-      submitDict["queueJob"] = 0;
-      submitDict["imageId"] = dbid;
-      submitDict["status"] = status;
-      submitDict["jobTime"] = timeStamp;
-      
-      $.ajax({
-        type: 'POST',
-        url: "../image",
-        dataType: 'json',
-        async: false,
-        data: submitDict,
-        success: function(json) {
-          return true
-        }
-      }); 
+      postQueuedJob($(this));
     }
   });
   
@@ -226,6 +231,7 @@ function commitJobs()
 
 $("#jobsApplyButton").click(function () {
   commitJobs();
+  refreshImages($( "#dbImageList" ));
   showMain();
 });
 
@@ -244,11 +250,8 @@ function getJobQueueTime(startIndex)
   }
 }
 
-function setupJobsPane()
+function sortJobItems()
 {
-  setupCalendar();
-  populatePanes();  
-
   var jobQueuedList = $('#jobQueued');
   var listitems = jobQueuedList.children('li').get();
   listitems.sort(function(a, b) {
@@ -266,6 +269,13 @@ function setupJobsPane()
     return (parseInt(aAttr)<parseInt(bAttr)) ? 1 : -1;
   });
   $.each(listitems, function(idx, itm) { jobCandidatesList.append(itm); });
+}
+
+function setupJobsPane()
+{
+  setupCalendar();
+  populatePanes();  
+  sortJobItems();
   
   $( "#jobCandidates, #jobQueued" ).sortable({
     connectWith: ".connectedSortable",
@@ -284,12 +294,13 @@ function setupJobsPane()
       if (droppedElem.hasClass('queued'))
       {
         droppedElem.find(".jobTimeStamp").text(timestampToDate(time));
+        droppedElem.find(".jobTimePicker").datepicker('setDate', new Date(time*1000));
       }
       else
       {
         createTimeTag(time, droppedElem);
       }
-      
+ 
       droppedElem.addClass('queued');
     }
   });

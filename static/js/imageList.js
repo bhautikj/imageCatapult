@@ -111,10 +111,29 @@ function createTimeTag(timeStamp, liElem)
   jobTimeLabel.appendTo(liElem);
   
   var jobTime = $('<input/>');
-  jobTime.addClass('jobTimeStamp');
+//   jobTime.addClass('jobTimeStamp');
+  jobTime.addClass('jobTimePicker');
   jobTime.attr('value',"");
   jobTime.attr('type','text');
-  jobTime.datetimepicker( { showOn: "both" });
+  jobTime.datetimepicker({ 
+    showOn: "both",
+    onClose: function( selectedDate ) {
+      var newDate = jobTime.datepicker('getDate') / 1000;
+      liElem.attr("jobTime", newDate);
+      jobTimeLabel.text(timestampToDate(newDate));
+      
+      var candidate = liElem.attr("candidate");
+      if (candidate == undefined)
+      {
+        postQueuedJob(liElem);
+      }
+      else
+      {
+        sortJobItems();
+      }
+    }
+  });
+  
   jobTime.datepicker('setDate', date);
   jobTime.appendTo(liElem);
   
@@ -122,6 +141,11 @@ function createTimeTag(timeStamp, liElem)
   queuedTag.click(function () {
     jobTime.datepicker('show');
   });
+  
+  jobTimeLabel.click(function () {
+    jobTime.datepicker('show');
+  });
+  
 
 }
 
