@@ -37,3 +37,6 @@
 [submodule "lib/DBWrapper"]
  path = lib/DBWrapper
  url = https://github.com/bhautikj/DBWrapper
+[submodule "static/jQuery-Timepicker-Addon"]
+	path = static/jQuery-Timepicker-Addon
+	url = https://github.com/trentrichardson/jQuery-Timepicker-Addon

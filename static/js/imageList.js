@@ -84,13 +84,7 @@ function createImageListElement(data)
   {
     if (data[3] != 0)
     {
-      var queuedTag = $('<div>');
-      queuedTag.addClass('queuedTag');
-      queuedTag.appendTo(li);
-      var jobTime = $('<span>');
-      jobTime.addClass('jobTimeStamp');
-      jobTime.text(timestampToDate(data[3]));
-      jobTime.appendTo(li);
+      createTimeTag(data[3], li);
     }
   }
 
@@ -100,6 +94,35 @@ function createImageListElement(data)
   img.appendTo(li);
 
   return li;
+}
+
+function createTimeTag(timeStamp, liElem)
+{
+  var date = new Date(timeStamp*1000);
+  var dt = $.datepicker.formatDate('yy-mm-dd', date);
+  
+  var queuedTag = $('<div>');
+  queuedTag.addClass('queuedTag');
+  queuedTag.appendTo(liElem);
+  
+  var jobTimeLabel = $('<span>');
+  jobTimeLabel.addClass('jobTimeStamp');
+  jobTimeLabel.text(timestampToDate(timeStamp));
+  jobTimeLabel.appendTo(liElem);
+  
+  var jobTime = $('<input/>');
+  jobTime.addClass('jobTimeStamp');
+  jobTime.attr('value',"");
+  jobTime.attr('type','text');
+  jobTime.datetimepicker( { showOn: "both" });
+  jobTime.datepicker('setDate', date);
+  jobTime.appendTo(liElem);
+  
+  jobTime.hide();
+  queuedTag.click(function () {
+    jobTime.datepicker('show');
+  });
+
 }
 
 $( "#applyFilterButton" ).click(function() {

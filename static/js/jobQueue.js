@@ -146,7 +146,7 @@ function setupCalendar()
     
     var li = $('<li>');
     li.attr("class","fixed dateHeader");
-    li.attr("style", "width:100px");
+//     li.attr("style", "width:100px");
     li.attr("hour", hour);
     li.attr("minute", minute);
     li.attr("day", day);
@@ -287,13 +287,7 @@ function setupJobsPane()
       }
       else
       {
-        var queuedTag = $('<div>');
-        queuedTag.addClass('queuedTag');
-        queuedTag.appendTo(droppedElem);
-        var jobTime = $('<span>');
-        jobTime.addClass('jobTimeStamp');
-        jobTime.text(timestampToDate(time));
-        jobTime.appendTo(droppedElem);
+        createTimeTag(time, droppedElem);
       }
       
       droppedElem.addClass('queued');
@@ -305,6 +299,7 @@ function setupJobsPane()
       var droppedElem = $(ui.draggable);
       droppedElem.children('.queuedTag').remove();
       droppedElem.children('.jobTimeStamp').remove();
+      droppedElem.children('.editQueued').remove();
       droppedElem.removeClass('queued');
     }
   });
