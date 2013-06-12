@@ -74,13 +74,16 @@ def postJob(jobId):
   jobDict["geoCode"] = int(jobDict["geoCode"])
   jobDict["latitude"] = float(jobDict["latitude"])
   jobDict["longitude"] = float(jobDict["longitude"])
-    
+  
+  
   serviceDict = jobDict["jobDict"]
-  jobStatus = {"flickr":False, "facebook": False, "tumblr": False, "twitter": False}
-  serviceDict["jobStatus"] = jobStatus
+  if "jobStatus" not in serviceDict.keys():
+    jobStatus = {"flickr":False, "facebook": False, "tumblr": False, "twitter": False}
+    serviceDict["jobStatus"] = jobStatus
   
+  print "GOING TO POST JOB: " + str(jobId)
   print serviceDict
-  
+
   if serviceDict["flickr"] != True:
     raise Exception("need at least flickr to work!")
   else:
