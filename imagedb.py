@@ -35,6 +35,7 @@ import datetime, time
 imagedbpath = os.path.join(paths.appBase, "image.db")
 schemapath = "image.sql"
 jobColumns = ["dburl","width","height","title","description","tags","flickrSets","flickrGroups","jobDict","geoCode","latitude","longitude"]
+flickrColumns = ["url", "imageThumbUrl", "imageLargeUrl", "shorturl"]
 
 def stringWrap(text):
   if text == None:

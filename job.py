@@ -22,7 +22,7 @@
 
 import findLibs
 from imagedb import imagedb
-from imagedb import jobColumns
+from imagedb import jobColumns, flickrColumns
 from paths import imageBase
 from flickrInterface import flickrObject
 from facebookInterface import facebookObject
@@ -32,7 +32,7 @@ from twitterInterface import twitterObject
 import web
 from web import form
 
-import os
+import os,sys
 import json
 import threading
 import datetime
@@ -44,8 +44,8 @@ def postPendingJobs():
   for jobId in jobIdList:
     postJob(jobId)
 
-def postJob(jobId):    
-  jobData = imagedb.getJob(jobId)[0]
+def postJob(jobId):
+  jobData = imagedb.getJob(jobId, jobColumns)[0]
   jobDict = {}
   
   #TODO: imageid == jobid may not always be true
@@ -57,6 +57,7 @@ def postJob(jobId):
       data = None
       
     jobDict[val] = data
+
   
   #cleanup
   jobDict["fileurl"] = os.path.join(imageBase, jobDict["dburl"])
@@ -74,7 +75,6 @@ def postJob(jobId):
   jobDict["geoCode"] = int(jobDict["geoCode"])
   jobDict["latitude"] = float(jobDict["latitude"])
   jobDict["longitude"] = float(jobDict["longitude"])
-  
   
   serviceDict = jobDict["jobDict"]
   if "jobStatus" not in serviceDict.keys():
@@ -95,7 +95,14 @@ def postJob(jobId):
         serviceDict["jobStatus"]["flickr"] = True
         imagedb.updateJobWorking(jobId, "queued", json.dumps(serviceDict))
       except:
+        print "Flickr error:", sys.exc_info()[0]
         return
+
+  flickrData = imagedb.getJob(jobId, flickrColumns)[0]
+  jobDict["flickrurl"] = flickrData["url"]
+  jobDict["flickrshorturl"] = flickrData["shorturl"]
+  jobDict["flickrImageThumbUrl"] = flickrData["imageThumbUrl"]
+  jobDict["flickrImageLargeUrl"] = flickrData["imageLargeUrl"]
   
   if serviceDict["facebook"]:
     if facebookObject.authorised:
@@ -105,6 +112,7 @@ def postJob(jobId):
           serviceDict["jobStatus"]["facebook"] = True
           imagedb.updateJobWorking(jobId, "queued", json.dumps(serviceDict))
         except:
+          print "Facebook error:", sys.exc_info()[0]
           return
 
   if serviceDict["tumblr"]:
@@ -115,6 +123,7 @@ def postJob(jobId):
           serviceDict["jobStatus"]["tumblr"] = True
           imagedb.updateJobWorking(jobId, "queued", json.dumps(serviceDict))
         except:
+          print "Tumblr error:", sys.exc_info()[0]
           return
 
   if serviceDict["twitter"]:
@@ -125,10 +134,11 @@ def postJob(jobId):
           serviceDict["jobStatus"]["twitter"] = True
           imagedb.updateJobWorking(jobId, "queued", json.dumps(serviceDict))
         except:
+          print "Twitter error:", sys.exc_info()[0]
           return
 
   imagedb.updateJobWorking(jobId, "done", json.dumps(serviceDict))
-  print "job complete!"
+  print "job complete! id:" + str(jobId)
 
 def postTwitterPost(jobDict):
   twitterObject.postImagePost(jobDict)
