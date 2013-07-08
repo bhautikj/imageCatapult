@@ -33,6 +33,11 @@ from flickr import FlickrAPI
 
 import json
 
+import datetime, time
+
+def getStartOfDay():
+  return int(time.mktime(datetime.datetime.utcnow().date().timetuple()))
+
 class FlickrObject(OAuthObjectBase):
   def __init__(self):
     OAuthObjectBase.__init__(self)
@@ -189,6 +194,38 @@ class FlickrObject(OAuthObjectBase):
         num = int(div)
     enc = a[num]+enc
     return "http://flic.kr/p/" + enc 
+  
+  def getViewedPhotosToday(self, params={}):
+    try:
+      if "date" not in params.keys():
+        datestamp = getStartOfDay()
+        params["date"] = datestamp
+      else:
+        datestamp = params["date"]
+
+      params["per_page"] = 100
+      firstQuery = self.flickrAPI.get("flickr.stats.getPopularPhotos", params)
+      nPages = firstQuery["photos"]["pages"]
+      photoList = []
+      if nPages > 0:
+        photoList += firstQuery["photos"]["photo"]
+      if nPages > 1:
+        paramPerPage = params
+        for pageNum in range(2, nPages+1):
+          paramPerPage["page"] = pageNum
+          pageQuery = self.flickrAPI.get("flickr.stats.getPopularPhotos", params)
+          photoList += pageQuery["photos"]["photo"]
+      
+      #only want the views & photo id & date 
+      returnList = []
+      for photo in photoList:
+        returnList.append (( photo["id"], photo["stats"]["views"] ))
+      
+      returnDict = { "datestamp":datestamp, "viewed":returnList }
+      
+      return returnDict
+    except:
+      pass
 
   def getPhotoImageSizes(self, photoId):
     params = {"photo_id":photoId}
@@ -197,6 +234,18 @@ class FlickrObject(OAuthObjectBase):
       print "cannot get photo info for photo " + photoId
       
     return result["sizes"]["size"]
+
+  def getTagsForPhoto(self, photoId):
+    params = {"photo_id":photoId}
+    result = self.flickrAPI.get("flickr.tags.getListPhoto", params)
+    if result["stat"] != "ok":
+      print "cannot get photo info for photo " + photoId
+    
+    tags = []
+    for tag in result["photo"]["tags"]["tag"]:
+      tags.append(tag["raw"])
+      
+    return tags
 
 #-------------------------------------------------------------------------------
 

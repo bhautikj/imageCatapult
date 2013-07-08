@@ -190,14 +190,12 @@ class ImageDb:
     db_is_new = not os.path.exists(db_filename)
     
     with sqlite3.connect(db_filename) as self.conn:
-        if db_is_new:
-            print 'Creating schema'
-            with open(schema_filename, 'rt') as f:
-                schema = f.read()
-            self.conn.executescript(schema)
-            #self.conn.close()
+      if db_is_new:
+        print 'Creating schema'
+        with open(schema_filename, 'rt') as f:
+            schema = f.read()
+        self.conn.executescript(schema)
 
-    #self.cursor = self.conn.cursor()
     self.db = dbwrapper.db.DBWrapper(filename=db_filename)
     self.tableColumnNames={}
     tables = self.db.get_tables()

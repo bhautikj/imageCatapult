@@ -71,6 +71,16 @@ class TumblrObject(OAuthObjectBase):
     token = oauth.Token(self.final_oauth_token, self.final_oauth_token_secret)
     self.tumblr = TumblrClient(hostname, consumer, token) 
 
+
+  def postTestPost(self):
+    params = {
+      'type': 'text',
+      'body': 'testPost'
+    }
+    json_response = self.tumblr.create_post(request_params=params)
+    if json_response["meta"]["status"] != 201:
+      raise Exception("Tumblr upload error!")   
+    
   def postImagePost(self, jobDict):
     captionString = ""
     
