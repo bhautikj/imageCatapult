@@ -39,6 +39,12 @@ def getAuthDict(service):
   except:  
     return {} 
 
+def deleteAuth(service):
+  authDict = pickle.load(open(picklePath,"rb"))
+  del authDict[service]
+  return pickle.dump(authDict, open(picklePath,"wb"))
+
+
 def setAuthDict(service, authDict):
   dict = getAuthDict(None)
   dict[service] = authDict

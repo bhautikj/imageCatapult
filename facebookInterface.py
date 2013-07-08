@@ -65,6 +65,7 @@ class FacebookObject(OAuthObjectBase):
     
   def postImagePost(self, jobDict):
     paramsDict = {}
+
     if jobDict["title"] != None:
       paramsDict["name"] = jobDict["title"]
     if jobDict["description"] != None:
