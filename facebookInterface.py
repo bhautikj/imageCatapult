@@ -76,6 +76,9 @@ class FacebookObject(OAuthObjectBase):
 
     self.facebookGraph.put_wall_post("",paramsDict)
 
+  def postTestPost(self):
+    self.facebookGraph.put_wall_post("TEST")
+
 #-------------------------------------------------------------------------------
 
 urls = (

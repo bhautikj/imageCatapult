@@ -89,8 +89,11 @@ class TwitterObject(OAuthObjectBase):
                             access_token_secret=self.final_oauth_token_secret) 
     
   def postImagePost(self, jobDict):
-    textToPost = jobDict["title"] + " " + jobDict["flickrshorturl"]
+    textToPost = str(jobDict["title"]) + " " + str(jobDict["flickrshorturl"])
     self.twitter.PostUpdate(textToPost)
+
+  def postTestPost(self):
+    self.twitter.PostUpdate("TEST")
     
 #-------------------------------------------------------------------------------
 

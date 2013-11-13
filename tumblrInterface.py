@@ -79,6 +79,7 @@ class TumblrObject(OAuthObjectBase):
     }
     json_response = self.tumblr.create_post(request_params=params)
     if json_response["meta"]["status"] != 201:
+      print json_response
       raise Exception("Tumblr upload error!")   
     
   def postImagePost(self, jobDict):
