@@ -24,6 +24,7 @@ import findLibs
 import imagedb
 import paths
 import coreOpts
+import imageGPS
 
 import Image
 
@@ -73,6 +74,10 @@ def ingestImage(tempFile, meta):
   meta["dburl"] = destFileName
   meta["displayurl"] = "../" + displayFileName
   meta["unixTime"] = makeUnixTime(meta["dateCreated"], meta["timeCreated"])
+  
+  lat, lon = imageGPS.get_lat_lon_image(moveDest)
+  meta["latitude"] = lat
+  meta["longitude"] = lon
 
   print "adding to db..:" + str(meta)
   imagedb.imagedb.addImage(meta)

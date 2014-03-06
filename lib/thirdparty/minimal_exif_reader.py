@@ -29,7 +29,11 @@ class MinimalExifReader:
   COPYRIGHT_TAG = 0x8298
   EXIF_SUBIFD_TAG = 0x8769
   DATE_TIME_ORIGINAL_TAG = 0x9003
-
+  GPS_LATITUDE_REF = 0x0001
+  GPS_LATITUDE = 0x0002
+  GPS_LONGITUDE_REF = 0x0003
+  GPS_LONGITUDE = 0x0004
+  
   #---------------------------------------
   def __init__(self, filename):
     """Pass in jpg exif file name to process.  Will attempt to find tags
