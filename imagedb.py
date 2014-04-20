@@ -398,6 +398,13 @@ class ImageDb:
 
     self.db.commit()
 
+  def listAllDoneImages(self):
+    query = "SELECT dburl FROM image NATURAL JOIN job WHERE job.status == 'done' "
+    exists = self.db.execute(query)
+    if len(exists) == 0:
+      return None
+    return exists
+
   def listAllImages(self, minDate=None, maxDate=None):
     query = "SELECT imageId, dburl, status, jobTime, unixTime FROM image NATURAL JOIN job WHERE job.status <> 'done' "
     if minDate != None:
@@ -546,4 +553,5 @@ class ImageDb:
     self.db.commit()
     
 imagedb = ImageDb(imagedbpath, schemapath)
+
 
